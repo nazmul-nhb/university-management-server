@@ -1,0 +1,55 @@
+{
+	"name": "university-management-server",
+	"version": "1.0.0",
+	"description": "University Management Server with Persian Bhai",
+	"main": "src/server.ts",
+	"scripts": {
+		"build": "rimraf dist && tsc",
+		"dev": "nodemon",
+		"deploy": "rimraf dist && tsc && vercel --prod",
+		"start": "node dist/server.js",
+		"format": "prettier --write src/",
+		"lint": "eslint src",
+		"fix": "eslint src --fix"
+	},
+	"keywords": [
+		"typescript",
+		"mongoose",
+		"express",
+		"bcrypt",
+		"university",
+		"management"
+	],
+	"author": {
+		"name": "Nazmul Hassan",
+		"email": "nazmulnhb@gmail.com"
+	},
+	"license": "ISC",
+	"dependencies": {
+		"bcrypt": "^5.1.1",
+		"cors": "^2.8.5",
+		"dotenv": "^16.4.5",
+		"express": "^4.21.1",
+		"mongoose": "^8.8.3",
+		"zod": "^3.23.8"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.15.0",
+		"@types/bcrypt": "^5.0.2",
+		"@types/cors": "^2.8.17",
+		"@types/express": "^5.0.0",
+		"@types/node": "^22.10.0",
+		"@typescript-eslint/eslint-plugin": "^8.16.0",
+		"@typescript-eslint/parser": "^8.16.0",
+		"eslint": "^9.15.0",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-prettier": "^5.2.1",
+		"globals": "^15.12.0",
+		"nodemon": "^3.1.7",
+		"prettier": "^3.4.1",
+		"rimraf": "^6.0.1",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.7.2",
+		"typescript-eslint": "^8.16.0"
+	}
+}
