@@ -17,7 +17,7 @@ const saveStudentIntoDB = async (
 	userData.role = 'student';
 
 	//set manually generated it
-	userData.id = '2030100001';
+	userData.id = '2030100002';
 
 	// create a user
 	const newUser = await User.create(userData);
