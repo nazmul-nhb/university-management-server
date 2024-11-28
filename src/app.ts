@@ -3,6 +3,7 @@ import express from 'express';
 import utilities from './app/utilities';
 import type { Application, NextFunction, Request, Response } from 'express';
 import { ErrorWithStatus } from './app/classes/ErrorWithStatus';
+import { userRoutes } from './app/modules/user/user.routes';
 
 const app: Application = express();
 
@@ -20,6 +21,7 @@ app.get('/', (_req: Request, res: Response) => {
 });
 
 // Application Routes
+app.use('/api/users', userRoutes);
 
 // Error handler for 404
 app.use((req: Request, _res: Response, next: NextFunction) => {
@@ -37,6 +39,8 @@ app.use((error: unknown, _req: Request, res: Response, next: NextFunction) => {
 
 	// Log error msg in the server console
 	console.error(`🛑 Error: ${processErrorMsgs(error)}`);
+
+	// console.error(error);
 
 	// Delegate to the default Express error handler
 	// if the headers have already been sent to the client

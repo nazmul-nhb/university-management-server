@@ -46,6 +46,10 @@ export default [
     },
   },
   {
+    files: ["src/app/modules/**/*.types.ts", "src/app/modules/**/*.interfaces.ts"],
+    rules: { "no-unused-vars": "off" },
+  },
+  {
     files: ["src/server.ts", "src/app/configs/**/*.ts"],
     rules: { "no-console": "off" },
   },
