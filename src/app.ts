@@ -1,11 +1,11 @@
 import cors from 'cors';
 import express from 'express';
 import type { Application, Request, Response } from 'express';
-import { userRoutes } from './app/modules/user/user.routes';
 import {
 	handleGlobalError,
 	handleNotFound,
 } from './app/middlewares/errorHandlers';
+import router from './app/routes';
 
 const app: Application = express();
 
@@ -23,7 +23,7 @@ app.get('/', (_req: Request, res: Response) => {
 });
 
 // Application Routes
-app.use('/api/users', userRoutes);
+app.use('/api', router);
 
 // Error handler for 404
 app.use(handleNotFound);
