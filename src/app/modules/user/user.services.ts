@@ -23,8 +23,8 @@ const saveStudentIntoDB = async (
 	const newUser = await User.create(userData);
 
 	//create a student
-    if (newUser._id) {
-        // console.log(studentData);
+	if (newUser._id) {
+		// console.log(studentData);
 		// set id , _id as user
 		studentData.id = newUser.id;
 		studentData.user = newUser._id; //reference _id

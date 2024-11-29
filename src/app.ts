@@ -6,6 +6,7 @@ import {
 	handleNotFound,
 } from './app/middlewares/errorHandlers';
 import router from './app/routes';
+import sendResponse from './app/utilities/sendResponse';
 
 const app: Application = express();
 
@@ -16,10 +17,7 @@ app.use(express.json());
 
 // Root/Test Route
 app.get('/', (_req: Request, res: Response) => {
-	res.status(200).json({
-		success: true,
-		message: 'Server is Running! 🏃',
-	});
+	sendResponse(res, 200, true, 'Server is Running! 🏃');
 });
 
 // Application Routes
