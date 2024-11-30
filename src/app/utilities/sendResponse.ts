@@ -4,7 +4,7 @@ import type { Response } from 'express';
  *
  * @param res Response from Express.js from the Specific Controller
  * @param statusCode HTTP Status Code
- * @param success Success Response `true` or `false` in boolean
+ * @param success Success Response as boolean (`true` or `false`)
  * @param message Custom Message Message
  * @param data Optional Data to send
  */

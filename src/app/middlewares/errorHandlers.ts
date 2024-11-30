@@ -1,17 +1,27 @@
-import type { NextFunction, Request, Response } from 'express';
+import type { ErrorRequestHandler, RequestHandler } from 'express';
 import { ErrorWithStatus } from '../classes/ErrorWithStatus';
-import utilities from '../utilities';
+import parseError from '../utilities/parseError';
+import sendResponse from '../utilities/sendResponse';
 
-export const handleGlobalError = (
+export const handleNotFound: RequestHandler = (req, _res, next) => {
+	const error = new ErrorWithStatus(
+		'NotFoundError',
+		`Requested End-Point “${req.method}: ${req.url}” Not Found!`,
+		404,
+	);
+	next(error);
+};
+
+export const handleGlobalError: ErrorRequestHandler = (
 	error: unknown,
-	_req: Request,
-	res: Response,
-	next: NextFunction,
+	_req,
+	res,
+	next,
 ) => {
-	const { processErrorMsgs, parseStatusCode } = utilities;
+	const { errorMessage, statusCode } = parseError(error);
 
 	// Log error msg in the server console
-	console.error(`🛑 Error: ${processErrorMsgs(error)}`);
+	console.error(`🛑 Error: ${errorMessage}`);
 
 	// console.error(error);
 
@@ -22,21 +32,5 @@ export const handleGlobalError = (
 	}
 
 	// Send error response with status code
-	res.status(parseStatusCode(error)).json({
-		success: false,
-		message: processErrorMsgs(error),
-	});
-};
-
-export const handleNotFound = (
-	req: Request,
-	_res: Response,
-	next: NextFunction,
-) => {
-	const error = new ErrorWithStatus(
-		'NotFoundError',
-		`Requested End-Point “${req.method}: ${req.url}” Not Found!`,
-		404,
-	);
-	next(error);
+	sendResponse(res, statusCode, false, errorMessage);
 };
