@@ -90,7 +90,7 @@ const parseError = (error: unknown): GenericError => {
 	// Check for MongoDB Duplicate Error
 	else if (isMongoDuplicateError(error)) {
 		const path = Object.keys(error.keyValue)[0];
-		errorMessage = `${path} with “${error.keyValue[path]}” already exists!`;
+		errorMessage = `Duplicate: ${path} with “${error.keyValue[path]}” already exists!`;
 		statusCode = 409;
 	}
 	// Check for Mongoose Cast Error (ObjectId issues)

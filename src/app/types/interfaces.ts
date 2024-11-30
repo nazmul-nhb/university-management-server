@@ -1,4 +1,4 @@
-export interface IMongoDuplicateError {
+export interface IDuplicateError {
 	errorResponse: {
 		index: number;
 		code: number;
