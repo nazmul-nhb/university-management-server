@@ -17,13 +17,40 @@ const isMongoDuplicateError = (error: unknown): error is IDuplicateError => {
 };
 
 /**
- * Type guard to check if an error is a CastError from Mongoose.
+ * Type guard to check if an error is a Mongoose CastError.
+ *
+ * @param error An unknown error object.
+ * @returns True if the error is a Mongoose CastError, false otherwise.
  */
 const isCastError = (error: unknown): error is CastError => {
-	return (
-		error instanceof MongooseError &&
-		(error as CastError).kind === 'ObjectId'
-	);
+	// Check for direct CastError
+	if (
+		error &&
+		typeof error === 'object' &&
+		'name' in error &&
+		(error as { name: string }).name === 'CastError'
+	) {
+		return true;
+	}
+
+	// Check if the error is a ValidationError containing CastError(s)
+	if (
+		error &&
+		typeof error === 'object' &&
+		'errors' in error &&
+		error instanceof MongooseError
+	) {
+		const errors = (error as { errors: Record<string, unknown> }).errors;
+		return Object.values(errors).some(
+			(nestedError) =>
+				typeof nestedError === 'object' &&
+				nestedError !== null &&
+				'name' in nestedError &&
+				(nestedError as { name: string }).name === 'CastError',
+		);
+	}
+
+	return false;
 };
 
 /**
@@ -73,6 +100,33 @@ const processZodErrors = (error: ZodError): string => {
 };
 
 /**
+ * Processes nested CastErrors and returns a formatted error message.
+ *
+ * @param error The main error object containing nested errors.
+ * @returns A formatted error message string.
+ */
+const processCastErrors = (error: {
+	errors: Record<string, unknown>;
+}): string => {
+	if (
+		error.errors &&
+		typeof error.errors === 'object' &&
+		!Array.isArray(error.errors)
+	) {
+		return Object.values(error.errors)
+			.filter((nestedError): nestedError is CastError =>
+				isCastError(nestedError),
+			)
+			.map(
+				(nestedError) =>
+					`Invalid ObjectId “${nestedError.value}” for “${nestedError.path}”!`,
+			)
+			.join('; ');
+	}
+	return 'Invalid Input!';
+};
+
+/**
  * Processes an error of `unknown` type and returns both the error message and status code.
  *
  * @param error An error of `unknown` type.
@@ -95,7 +149,13 @@ const parseError = (error: unknown): GenericError => {
 	}
 	// Check for Mongoose Cast Error (ObjectId issues)
 	else if (isCastError(error)) {
-		errorMessage = `Invalid ObjectId: ${error.value}`;
+		if ('errors' in error) {
+			errorMessage = processCastErrors(
+				error as { errors: Record<string, unknown> },
+			);
+		} else {
+			errorMessage = `Invalid ObjectId: “${error.value}” for “${error.path}”`;
+		}
 		statusCode = 400;
 	}
 	// Check for Express Body Parser Error
