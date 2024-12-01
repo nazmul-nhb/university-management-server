@@ -1,11 +1,12 @@
-import type { Document } from 'mongoose';
-import type { TSemester } from '../semester/semester.types';
-import { User } from './user.model';
+// import { User } from './user.model';
+import { semesterServices } from '../semester/semester.services';
+import { ErrorWithStatus } from '../../classes/ErrorWithStatus';
+import { Student } from '../student/student.model';
 
-const findLastStudentId = async () => {
-	const lastStudent = await User.findOne(
+const findLastStudentId = async (semesterId: string) => {
+	const lastStudent = await Student.findOne(
 		{
-			role: 'student',
+			admissionSemester: semesterId,
 		},
 		{
 			id: 1,
@@ -17,20 +18,35 @@ const findLastStudentId = async () => {
 		})
 		.lean();
 
-	//! This design has a serious flaw! What if a student admits into a new semester? The ID will still be an increment of the previous id, no matter which semester. Eah semester should have started with 0001 id for each department
+	// ! This design has a serious flaw! What if a student admits into a new semester? The ID will still be an increment of the previous id, no matter which semester. Eah semester should have started with 0001 id for each department
+	// ! Operation should be run in Student Collection when department model is created!
+	// * Partially Fixed!
+	// TODO: Need to Modify after department is added
 
-	//203001   0001
 	return lastStudent?.id ? lastStudent.id.substring(6) : undefined;
 };
 
-export const generateStudentId = async (payload: TSemester & Document) => {
-	// first time 0000
-	//0001  => 1
-	const currentId = (await findLastStudentId()) || '0';
+export const generateStudentId = async (semesterId: string) => {
+	// Find academic semester info
+	const admissionSemester =
+		await semesterServices.getSingleSemesterFromDB(semesterId);
+
+	// Set generated id
+	if (!admissionSemester) {
+		throw new ErrorWithStatus(
+			'SemesterNotFound',
+			`No Semester Matched with ${semesterId}`,
+			404,
+		);
+	}
+
+	const { year, code } = admissionSemester;
+
+	const currentId = (await findLastStudentId(semesterId)) || '0';
 
 	let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
 
-	incrementId = `${payload.year}${payload.code}${incrementId}`;
+	incrementId = `${year}${code}${incrementId}`;
 
 	return incrementId;
 };

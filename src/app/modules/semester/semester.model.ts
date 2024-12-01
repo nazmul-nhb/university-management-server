@@ -32,6 +32,7 @@ const semesterSchema = new Schema<TSemester>(
 	},
 	{
 		timestamps: true,
+		versionKey: false,
 	},
 );
 

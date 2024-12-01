@@ -4,49 +4,57 @@ import type { TStudent } from '../student/student.types';
 import type { TUser } from './user.types';
 import { User } from './user.model';
 import { generateStudentId } from './user.utilities';
-import { semesterServices } from '../semester/semester.services';
+import { startSession } from 'mongoose';
 import { ErrorWithStatus } from '../../classes/ErrorWithStatus';
 
 const saveStudentIntoDB = async (
 	password: string = configs.defaultPassword,
 	payload: TStudent,
 ) => {
-	// create a user object
-	const userData: Partial<TUser> = {};
+	const session = await startSession();
+	session.startTransaction();
 
-	userData.password = password;
-
-	//set student role
-	userData.role = 'student';
-
-	// find academic semester info
-	const admissionSemester = await semesterServices.getSingleSemesterFromDB(
-		payload.admissionSemester.toString(),
-	);
-
-	//set  generated id
-	if (!admissionSemester) {
-		throw new ErrorWithStatus(
-			'SemesterNotFound',
-			`No Semester Matched with ${payload.admissionSemester}`,
-			404,
+	try {
+		const studentId = await generateStudentId(
+			payload.admissionSemester.toString(),
 		);
-	}
 
-	userData.id = await generateStudentId(admissionSemester);
+		// create a user object
+		const userData: Partial<TUser> = {
+			password,
+			role: 'student',
+			id: studentId,
+		};
 
-	// create a user
-	const newUser = await User.create(userData);
+		// create a user
+		const newUser = await User.create([userData], { session });
 
-	//create a student
-	if (newUser._id) {
-		// console.log(payload);
-		// set id , _id as user
-		payload.id = newUser.id;
-		payload.user = newUser._id; //reference _id
+		if (!newUser[0]?._id) {
+			throw new ErrorWithStatus(
+				'UserCreationFailed!',
+				'Failed to create user!',
+				422,
+			);
+		}
 
-		const newStudent = await Student.create(payload);
-		return newStudent;
+		// Assign `id` and `_id` for the student payload
+		payload.id = newUser[0].id;
+		payload.user = newUser[0]._id;
+
+		// Create the Student document
+		const newStudent = await Student.create([payload], { session });
+
+		// Commit the transaction
+		await session.commitTransaction();
+		session.endSession();
+
+		return newStudent[0];
+	} catch (error) {
+		// Rollback the transaction
+		await session.abortTransaction();
+		session.endSession();
+
+		throw error;
 	}
 };
 
