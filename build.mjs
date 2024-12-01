@@ -8,9 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Set up progress-estimator cache
-const estimator = progressEstimator({
-    storagePath: join(__dirname, '.build-cache'),
-});
+const estimator = progressEstimator({ storagePath: join(__dirname, '.estimator') });
 
 (async () => {
     const startTime = performance.now();
