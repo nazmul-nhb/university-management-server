@@ -6,7 +6,7 @@ import { User } from './user.model';
 
 const saveStudentIntoDB = async (
 	password: string = configs.defaultPassword,
-	studentData: TStudent,
+	payload: TStudent,
 ) => {
 	// create a user object
 	const userData: Partial<TUser> = {};
@@ -24,12 +24,12 @@ const saveStudentIntoDB = async (
 
 	//create a student
 	if (newUser._id) {
-		// console.log(studentData);
+		// console.log(payload);
 		// set id , _id as user
-		studentData.id = newUser.id;
-		studentData.user = newUser._id; //reference _id
+		payload.id = newUser.id;
+		payload.user = newUser._id; //reference _id
 
-		const newStudent = await Student.create(studentData);
+		const newStudent = await Student.create(payload);
 		return newStudent;
 	}
 };

@@ -9,4 +9,4 @@ const creationSchema = z.object({
 		.optional(),
 });
 
-export const zodUser = { creationSchema };
+export const userValidations = { creationSchema };

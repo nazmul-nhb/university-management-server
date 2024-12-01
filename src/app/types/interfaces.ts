@@ -1,3 +1,5 @@
+import type { Router } from "express";
+
 export interface IDuplicateError {
 	errorResponse: {
 		index: number;
@@ -18,4 +20,9 @@ export interface IParserError {
 	status: number;
 	body: string;
 	type: string;
+}
+
+export interface IRoute {
+    path: string;
+    route: Router;
 }

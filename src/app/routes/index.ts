@@ -1,12 +1,18 @@
 import { Router } from 'express';
 import { userRoutes } from '../modules/user/user.routes';
+import { semesterRoutes } from '../modules/semester/semester.routes';
+import type { IRoute } from '../types/interfaces';
 
 const router = Router();
 
-const routes = [
+const routes: IRoute[] = [
 	{
 		path: '/users',
 		route: userRoutes,
+	},
+	{
+		path: '/semesters',
+		route: semesterRoutes,
 	},
 ];
 
