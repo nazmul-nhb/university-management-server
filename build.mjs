@@ -23,7 +23,7 @@ const estimator = progressEstimator({ storagePath: join(__dirname, '.estimator')
 
         const buildTime = ((endTime - startTime) / 1000).toFixed(2);
 
-        console.info(chalk.green(`✓ Application was built in ${buildTime} seconds!`));
+        console.info(chalk.green(`✓ Application was built in ${chalk.redBright(buildTime)} seconds!`));
     } catch (error) {
         console.error(chalk.red('🛑 Build Failed!'), error);
         process.exit(1);

@@ -64,13 +64,6 @@ const isParserError = (error: unknown): error is IParserError => {
 };
 
 /**
- * Type guard to check if an error is a ZodError.
- */
-const isZodError = (error: unknown): error is ZodError => {
-	return error instanceof ZodError;
-};
-
-/**
  * Processes a Zod validation error and returns a formatted error message.
  *
  * @param error A ZodError instance.
@@ -137,7 +130,7 @@ const parseError = (error: unknown): GenericError => {
 	let statusCode = 500;
 
 	// Check for Zod Validation Error
-	if (isZodError(error)) {
+	if (error instanceof ZodError) {
 		errorMessage = processZodErrors(error);
 		statusCode = 400;
 	}
