@@ -3,6 +3,9 @@ import { Student } from '../student/student.model';
 import type { TStudent } from '../student/student.types';
 import type { TUser } from './user.types';
 import { User } from './user.model';
+import { generateStudentId } from './user.utilities';
+import { semesterServices } from '../semester/semester.services';
+import { ErrorWithStatus } from '../../classes/ErrorWithStatus';
 
 const saveStudentIntoDB = async (
 	password: string = configs.defaultPassword,
@@ -16,8 +19,21 @@ const saveStudentIntoDB = async (
 	//set student role
 	userData.role = 'student';
 
-	//set manually generated it
-	userData.id = '2030100002';
+	// find academic semester info
+	const admissionSemester = await semesterServices.getSingleSemesterFromDB(
+		payload.admissionSemester.toString(),
+	);
+
+	//set  generated id
+	if (!admissionSemester) {
+		throw new ErrorWithStatus(
+			'SemesterNotFound',
+			`No Semester Matched with ${payload.admissionSemester}`,
+			404,
+		);
+	}
+
+	userData.id = await generateStudentId(admissionSemester);
 
 	// create a user
 	const newUser = await User.create(userData);
