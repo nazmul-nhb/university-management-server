@@ -19,6 +19,38 @@ const saveSemesterIntoDB = async (payload: TSemester) => {
 	return newSemester;
 };
 
+const getAllSemestersFromDB = async () => {
+	const result = await Semester.find();
+	return result;
+};
+
+const getSingleSemesterFromDB = async (id: string) => {
+	const result = await Semester.findById(id);
+	return result;
+};
+
+const updateSemesterInDB = async (id: string, payload: Partial<TSemester>) => {
+	if (
+		payload.name &&
+		payload.code &&
+		semesterNameCodeMapper[payload.name] !== payload.code
+	) {
+		throw new ErrorWithStatus(
+			'InvalidSemester',
+			'Invalid Semester Code!',
+			422,
+		);
+	}
+
+	const result = await Semester.findOneAndUpdate({ _id: id }, payload, {
+		new: true,
+	});
+	return result;
+};
+
 export const semesterServices = {
 	saveSemesterIntoDB,
+	getAllSemestersFromDB,
+	getSingleSemesterFromDB,
+	updateSemesterInDB,
 };
