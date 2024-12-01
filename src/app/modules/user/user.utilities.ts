@@ -31,7 +31,7 @@ export const generateStudentId = async (semesterId: string) => {
 	const admissionSemester =
 		await semesterServices.getSingleSemesterFromDB(semesterId);
 
-	// Set generated id
+	// Throw Error when no Admission Semester id found
 	if (!admissionSemester) {
 		throw new ErrorWithStatus(
 			'SemesterNotFound',
@@ -44,9 +44,9 @@ export const generateStudentId = async (semesterId: string) => {
 
 	const currentId = (await findLastStudentId(semesterId)) || '0';
 
-	let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
+	const incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
 
-	incrementId = `${year}${code}${incrementId}`;
+	const finalId = `${year}${code}${incrementId}`;
 
-	return incrementId;
+	return finalId;
 };
