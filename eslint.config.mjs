@@ -36,7 +36,7 @@ export default [
       'prettier/prettier': 'off',
       'no-unused-expressions': 'error',
       'prefer-const': 'error',
-      "no-console": ["warn", { "allow": ["warn", "error"] }],
+      "no-console": ["warn", { "allow": ["info", "warn", "error"] }],
       'no-undef': 'error',
       "@typescript-eslint/no-empty-object-type": "off",
       '@typescript-eslint/no-unused-expressions': 'error',
@@ -75,5 +75,9 @@ export default [
   {
     files: ['src/app/classes/**/*.ts'],
     rules: { "@typescript-eslint/no-explicit-any": "off" }
+  },
+  {
+    files: ['dist/**/*.js'],
+    rules: { "@typescript-eslint/no-require-imports": "off" }
   }
 ];
