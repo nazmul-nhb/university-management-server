@@ -44,7 +44,7 @@ semesterSchema.pre('save', async function (next) {
 	if (semesterExists) {
 		throw new ErrorWithStatus(
 			'SemesterExists',
-			'Semester Already Exists',
+			`${this.name} Semester Already Exists for Year ${this.year}!`,
 			409,
 		);
 	}

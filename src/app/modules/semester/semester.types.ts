@@ -24,5 +24,5 @@ export type TSemester = {
 };
 
 export type TSemesterNameCodeMapper = {
-	[key: string]: string;
+	[key in TSemesterName]: TSemesterCode;
 };
