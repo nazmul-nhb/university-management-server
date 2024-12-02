@@ -5,6 +5,7 @@ import { MongooseError } from 'mongoose';
 import { ErrorWithStatus } from '../classes/ErrorWithStatus';
 
 type GenericError = { errorMessage: string; statusCode: number };
+type NestedError = { errors: Record<string, unknown> };
 
 /**
  * Processes an error of `unknown` type and returns both the error message and status code.
@@ -30,9 +31,7 @@ const parseError = (error: unknown): GenericError => {
 	// Check for Mongoose Cast Error (ObjectId issues)
 	else if (isCastError(error)) {
 		if ('errors' in error) {
-			errorMessage = processCastErrors(
-				error as { errors: Record<string, unknown> },
-			);
+			errorMessage = processCastErrors(error as NestedError);
 		} else {
 			errorMessage = `Invalid ObjectId: “${error.value}” for “${error.path}”`;
 		}
@@ -80,7 +79,7 @@ const isCastError = (error: unknown): error is CastError => {
 		error &&
 		typeof error === 'object' &&
 		'name' in error &&
-		(error as { name: string }).name === 'CastError'
+		error.name === 'CastError'
 	) {
 		return true;
 	}
@@ -92,13 +91,13 @@ const isCastError = (error: unknown): error is CastError => {
 		'errors' in error &&
 		error instanceof MongooseError
 	) {
-		const errors = (error as { errors: Record<string, unknown> }).errors;
+		const errors = (error as NestedError).errors;
 		return Object.values(errors).some(
 			(nestedError) =>
 				typeof nestedError === 'object' &&
 				nestedError !== null &&
 				'name' in nestedError &&
-				(nestedError as { name: string }).name === 'CastError',
+				nestedError.name === 'CastError',
 		);
 	}
 
@@ -126,17 +125,17 @@ const processZodErrors = (error: ZodError): string => {
 		.map((err) => {
 			switch (err.code) {
 				case ZodIssueCode.invalid_type:
-					return `Expected ${err.expected} for “${err.path.join('.')}” but received ${err.received}!`;
+					return `Expected ${err.expected} for “${err.path.join('.')}” but received “${err.received}”!`;
 				case ZodIssueCode.invalid_enum_value:
-					return `Invalid value for “${err.path.join('.')}”. Expected one of ${err.options.join(
+					return `Invalid value for “${err.path.join('.')}”. Expected one of: “${err.options.join(
 						', ',
-					)} but received ${err.received}.`;
+					)}” but received “${err.received}”.`;
 				case ZodIssueCode.too_small:
-					return `Value at “${err.path.join('.')}” is too small. Minimum: ${err.minimum}.`;
+					return `Value for “${err.path.join('.')}” is too small. Minimum: ${err.minimum}.`;
 				case ZodIssueCode.too_big:
-					return `Value at “${err.path.join('.')}” is too large. Maximum: ${err.maximum}.`;
+					return `Value for “${err.path.join('.')}” is too large. Maximum: ${err.maximum}.`;
 				case ZodIssueCode.invalid_string:
-					return `Invalid string format at “${err.path.join('.')}”. Expected ${err.validation}.`;
+					return `Invalid string format for “${err.path.join('.')}”. Expected ${err.validation}.`;
 				default:
 					return `${err.path.join('.')}: ${err.message}`;
 			}
@@ -168,6 +167,7 @@ const processCastErrors = (error: {
 			)
 			.join('; ');
 	}
+
 	return 'Invalid Input!';
 };
 
