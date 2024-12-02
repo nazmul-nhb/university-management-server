@@ -3,6 +3,9 @@ import { ErrorWithStatus } from '../classes/ErrorWithStatus';
 import parseError from '../utilities/parseError';
 import sendResponse from '../utilities/sendResponse';
 
+/**
+ * Middleware to Handle Route/Method Not Found Errors
+ */
 export const handleNotFound: RequestHandler = (req, _res, next) => {
 	const error = new ErrorWithStatus(
 		'NotFoundError',
@@ -12,6 +15,9 @@ export const handleNotFound: RequestHandler = (req, _res, next) => {
 	next(error);
 };
 
+/**
+ * Middleware to Handle Global Errors
+ */
 export const handleGlobalError: ErrorRequestHandler = (
 	error: unknown,
 	_req,
@@ -20,17 +26,17 @@ export const handleGlobalError: ErrorRequestHandler = (
 ) => {
 	const { errorMessage, statusCode } = parseError(error);
 
-	// Log error msg in the server console
+	// * Log error msg in the server console
 	console.error(`🛑 Error: ${errorMessage}`);
 
 	// console.error(error);
 
-	// Delegate to the default Express error handler
-	// if the headers have already been sent to the client
+	// * Delegate to the default Express error handler
+	// ? if the headers have already been sent to the client
 	if (res.headersSent) {
 		return next(error);
 	}
 
-	// Send error response with status code
+	// * Send error response with status code
 	sendResponse(res, statusCode, false, errorMessage);
 };

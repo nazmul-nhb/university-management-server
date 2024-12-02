@@ -1,6 +1,6 @@
 {
 	"name": "university-management-server",
-	"version": "1.1.0",
+	"version": "1.2.1",
 	"description": "University Management Server with Persian Bhai",
 	"main": "dist/server.js",
 	"scripts": {

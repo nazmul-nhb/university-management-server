@@ -46,7 +46,7 @@ export const creationSchema = z.object({
 	}),
 });
 
-const updateSchema = creationSchema.partial()
+const updateSchema = creationSchema.partial();
 
 export const studentValidations = {
 	creationSchema,

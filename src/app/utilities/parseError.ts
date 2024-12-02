@@ -7,6 +7,58 @@ import { ErrorWithStatus } from '../classes/ErrorWithStatus';
 type GenericError = { errorMessage: string; statusCode: number };
 
 /**
+ * Processes an error of `unknown` type and returns both the error message and status code.
+ *
+ * @param error An error of `unknown` type.
+ * @returns An object containing the error message and the corresponding status code.
+ */
+const parseError = (error: unknown): GenericError => {
+	let errorMessage = 'Unexpected Error Occurred!';
+	let statusCode = 500;
+
+	// Check for Zod Validation Error
+	if (error instanceof ZodError) {
+		errorMessage = processZodErrors(error);
+		statusCode = 400;
+	}
+	// Check for MongoDB Duplicate Error
+	else if (isMongoDuplicateError(error)) {
+		const path = Object.keys(error.keyValue)[0];
+		errorMessage = `Duplicate: ${path} with “${error.keyValue[path]}” already exists!`;
+		statusCode = 409;
+	}
+	// Check for Mongoose Cast Error (ObjectId issues)
+	else if (isCastError(error)) {
+		if ('errors' in error) {
+			errorMessage = processCastErrors(
+				error as { errors: Record<string, unknown> },
+			);
+		} else {
+			errorMessage = `Invalid ObjectId: “${error.value}” for “${error.path}”`;
+		}
+		statusCode = 400;
+	}
+	// Check for Express Body Parser Error
+	else if (isParserError(error)) {
+		errorMessage = 'Invalid JSON Payload!';
+		statusCode = 400;
+	}
+	// Check for custom ErrorWithStatus
+	else if (error instanceof ErrorWithStatus) {
+		errorMessage = error.message;
+		statusCode = error.status;
+	}
+	// General error handler
+	else if (error instanceof Error) {
+		errorMessage = error.message;
+	} else {
+		errorMessage = 'Unexpected Error Occurred!';
+	}
+
+	return { errorMessage, statusCode };
+};
+
+/**
  * Type guard to check if an error is a MongoDB Duplicate Error.
  */
 const isMongoDuplicateError = (error: unknown): error is IDuplicateError => {
@@ -117,58 +169,6 @@ const processCastErrors = (error: {
 			.join('; ');
 	}
 	return 'Invalid Input!';
-};
-
-/**
- * Processes an error of `unknown` type and returns both the error message and status code.
- *
- * @param error An error of `unknown` type.
- * @returns An object containing the error message and the corresponding status code.
- */
-const parseError = (error: unknown): GenericError => {
-	let errorMessage = 'Unexpected Error Occurred!';
-	let statusCode = 500;
-
-	// Check for Zod Validation Error
-	if (error instanceof ZodError) {
-		errorMessage = processZodErrors(error);
-		statusCode = 400;
-	}
-	// Check for MongoDB Duplicate Error
-	else if (isMongoDuplicateError(error)) {
-		const path = Object.keys(error.keyValue)[0];
-		errorMessage = `Duplicate: ${path} with “${error.keyValue[path]}” already exists!`;
-		statusCode = 409;
-	}
-	// Check for Mongoose Cast Error (ObjectId issues)
-	else if (isCastError(error)) {
-		if ('errors' in error) {
-			errorMessage = processCastErrors(
-				error as { errors: Record<string, unknown> },
-			);
-		} else {
-			errorMessage = `Invalid ObjectId: “${error.value}” for “${error.path}”`;
-		}
-		statusCode = 400;
-	}
-	// Check for Express Body Parser Error
-	else if (isParserError(error)) {
-		errorMessage = 'Invalid JSON Payload!';
-		statusCode = 400;
-	}
-	// Check for custom ErrorWithStatus
-	else if (error instanceof ErrorWithStatus) {
-		errorMessage = error.message;
-		statusCode = error.status;
-	}
-	// General error handler
-	else if (error instanceof Error) {
-		errorMessage = error.message;
-	} else {
-		errorMessage = 'Unexpected Error Occurred!';
-	}
-
-	return { errorMessage, statusCode };
 };
 
 export default parseError;
