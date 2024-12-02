@@ -1,6 +1,7 @@
 import sendResponse from '../../utilities/sendResponse';
 import catchAsync from '../../utilities/catchAsync';
 import { semesterServices } from './semester.services';
+import { ErrorWithStatus } from '../../classes/ErrorWithStatus';
 
 const createSemester = catchAsync(async (req, res) => {
 	const newSemester = await semesterServices.saveSemesterIntoDB(req.body);
@@ -31,6 +32,14 @@ const getSingleSemester = catchAsync(async (req, res) => {
 		req.params.id,
 	);
 
+	if (!semester) {
+		throw new ErrorWithStatus(
+			'SemesterNotFound',
+			`Semester with id: ${req.params.id} not found!`,
+			404,
+		);
+	}
+
 	sendResponse(
 		res,
 		200,
@@ -45,6 +54,15 @@ const updateSemester = catchAsync(async (req, res) => {
 		req.params.id,
 		req.body,
 	);
+
+	if (!semester) {
+		throw new ErrorWithStatus(
+			'SemesterNotUpdatable',
+			`Semester with id: ${req.params.id} not found!`,
+			404,
+		);
+	}
+
 	sendResponse(
 		res,
 		200,
