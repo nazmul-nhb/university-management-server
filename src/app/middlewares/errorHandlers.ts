@@ -38,5 +38,5 @@ export const handleGlobalError: ErrorRequestHandler = (
 	}
 
 	// * Send error response with status code
-	sendResponse(res, statusCode, false, errorMessage);
+	sendResponse(res, statusCode, errorMessage);
 };

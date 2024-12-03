@@ -3,6 +3,7 @@ import { userRoutes } from '../modules/user/user.routes';
 import { semesterRoutes } from '../modules/semester/semester.routes';
 import type { IRoute } from '../types/interfaces';
 import { studentRoutes } from '../modules/student/student.routes';
+import { facultyRoutes } from '../modules/faculty/faculty.routes';
 
 const router = Router();
 
@@ -18,6 +19,10 @@ const routes: IRoute[] = [
 	{
 		path: '/semesters',
 		route: semesterRoutes,
+	},
+	{
+		path: '/faculties',
+		route: facultyRoutes,
 	},
 ];
 

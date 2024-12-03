@@ -10,13 +10,7 @@ const createStudent = catchAsync(async (req, res) => {
 		studentData,
 	);
 
-	sendResponse(
-		res,
-		201,
-		true,
-		'Student is created successfully!',
-		newStudent,
-	);
+	sendResponse(res, 201, 'Student is created successfully!', newStudent);
 });
 
 export const userControllers = {

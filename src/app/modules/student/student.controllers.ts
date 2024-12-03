@@ -6,13 +6,7 @@ import { studentServices } from './student.services';
 const getAllStudents = catchAsync(async (_req, res) => {
 	const students = await studentServices.getAllStudentsFromDB();
 
-	sendResponse(
-		res,
-		200,
-		true,
-		'Students are retrieved successfully',
-		students,
-	);
+	sendResponse(res, 200, 'Students are retrieved successfully', students);
 });
 
 const getSingleStudent = catchAsync(async (req, res) => {
@@ -26,7 +20,7 @@ const getSingleStudent = catchAsync(async (req, res) => {
 		);
 	}
 
-	sendResponse(res, 200, true, 'Student is retrieved successfully', student);
+	sendResponse(res, 200, 'Student is retrieved successfully', student);
 });
 
 const updateStudent = catchAsync(async (req, res) => {
@@ -43,7 +37,7 @@ const updateStudent = catchAsync(async (req, res) => {
 		);
 	}
 
-	sendResponse(res, 200, true, 'Student is updated successfully', student);
+	sendResponse(res, 200, 'Student is updated successfully', student);
 });
 
 export const studentControllers = {
