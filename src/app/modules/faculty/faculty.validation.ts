@@ -6,4 +6,4 @@ const creationSchema = z.object({
 
 const updateSchema = creationSchema.partial();
 
-export const facultyValidation = { creationSchema, updateSchema };
+export const facultyValidations = { creationSchema, updateSchema };
