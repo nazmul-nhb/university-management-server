@@ -16,8 +16,12 @@ const getAllStudentsFromDB = async () => {
 	return result;
 };
 
+/**
+ *
+ * @param id The id field in student doc
+ */
 const getSingleStudentFromDB = async (id: string) => {
-	const result = await Student.findById(id) // TODO: Find by generated ID
+	const result = await Student.findOne({ id })
 		.populate('admissionSemester')
 		.populate({
 			path: 'academicDepartment',
@@ -27,23 +31,26 @@ const getSingleStudentFromDB = async (id: string) => {
 	return result;
 };
 
+/**
+ *
+ * @param id The id field in student doc
+ */
 const updateStudentInDB = async (id: string, payload: Partial<TStudent>) => {
 	const flattener = new PayloadFlattener(payload);
 
 	const modifiedPayload = flattener.flattenedPayload;
 
-	const result = await Student.findOneAndUpdate(
-		{ _id: id },
-		modifiedPayload,
-		{ new: true, runValidators: true },
-	);
+	const result = await Student.findOneAndUpdate({ id }, modifiedPayload, {
+		new: true,
+		runValidators: true,
+	});
 
 	return result;
 };
 
 /**
  *
- * @param id `user` id that is linked with user
+ * @param id The id field in student doc
  */
 const deleteStudentFromDB = async (id: string) => {
 	const session = await startSession();
@@ -53,7 +60,7 @@ const deleteStudentFromDB = async (id: string) => {
 
 	try {
 		const deletedStudent = await Student.findOneAndUpdate(
-			{ user: id },
+			{ id },
 			{ isDeleted: true },
 			{ new: true, session },
 		);
@@ -67,7 +74,7 @@ const deleteStudentFromDB = async (id: string) => {
 		}
 
 		const deletedUser = await User.findOneAndUpdate(
-			{ _id: id },
+			{ id },
 			{ isDeleted: true },
 			{ new: true, session },
 		);
