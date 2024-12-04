@@ -18,7 +18,7 @@ const findLastStudentId = async (semesterId: string, departmentId: string) => {
 	 * ! Each semester should have started with 0001 id for each department. - * Fixed
 	 * ! Operation should be run in Student Collection when department model is created! - * Fixed
 	 * ? New Issue : ID should have department code at the beginning
-	 * ? Or Each Department should have separate collection to avoid conflict 
+	 * ? Or Each Department should have separate collection to avoid conflict
 	 */
 
 	return lastStudent?.id ? lastStudent.id.substring(6) : null;

@@ -3,6 +3,7 @@ import { Student } from './student.model';
 import type { TStudent } from './student.types';
 import { ErrorWithStatus } from '../../classes/ErrorWithStatus';
 import { User } from '../user/user.model';
+import { PayloadFlattener } from '../../classes/PayloadFlattener';
 
 const getAllStudentsFromDB = async () => {
 	const result = await Student.find()
@@ -27,10 +28,15 @@ const getSingleStudentFromDB = async (id: string) => {
 };
 
 const updateStudentInDB = async (id: string, payload: Partial<TStudent>) => {
-	const result = await Student.findOneAndUpdate({ _id: id }, payload, {
-		new: true,
-		upsert: true,
-	});
+	const flattener = new PayloadFlattener(payload);
+
+	const modifiedPayload = flattener.flattenedPayload;
+
+	const result = await Student.findOneAndUpdate(
+		{ _id: id },
+		modifiedPayload,
+		{ new: true, runValidators: true },
+	);
 
 	return result;
 };
