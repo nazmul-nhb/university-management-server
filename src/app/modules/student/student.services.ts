@@ -1,9 +1,9 @@
 import { startSession } from 'mongoose';
 import { Student } from './student.model';
+import { User } from '../user/user.model';
 import type { TStudent } from './student.types';
 import { ErrorWithStatus } from '../../classes/ErrorWithStatus';
-import { User } from '../user/user.model';
-import { PayloadFlattener } from '../../classes/PayloadFlattener';
+import { flattenPayload } from '../../utilities/flattenPayload';
 
 const getAllStudentsFromDB = async () => {
 	const result = await Student.find()
@@ -36,9 +36,7 @@ const getSingleStudentFromDB = async (id: string) => {
  * @param id The value for `id` field in student doc
  */
 const updateStudentInDB = async (id: string, payload: Partial<TStudent>) => {
-	const flattener = new PayloadFlattener(payload);
-
-	const modifiedPayload = flattener.flattenedPayload;
+	const modifiedPayload = flattenPayload(payload);
 
 	const result = await Student.findOneAndUpdate({ id }, modifiedPayload, {
 		new: true,

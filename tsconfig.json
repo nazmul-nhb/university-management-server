@@ -1,31 +1,18 @@
 {
 	"compilerOptions": {
-		/* Visit https://aka.ms/tsconfig to read more about this file */
-
-		/* Language and Environment */
-		"target": "es2016" /* Set the JavaScript language version for emitted JavaScript and 
-
-    /* Modules */,
-		"module": "commonjs" /* Specify what module code is generated. */,
-		"rootDir": "./src" /* Specify the root folder within your source files. */,
-
-		/* Emit */
-		"outDir": "./dist" /* Specify an output folder for all emitted files. */,
-
-		/* Interop Constraints */
-		"esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
-		"forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
-
-		/* Type Checking */
-		"strict": true /* Enable all strict type-checking options. */,
-		"noImplicitAny": true /* Enable error reporting for expressions and declarations with an implied 'any' type. */,
-		"useUnknownInCatchVariables": true /* Default catch clause variables as 'unknown' instead of 'any'. */,
-		"noUnusedLocals": true /* Enable error reporting when local variables aren't read. */,
-		"noUnusedParameters": true /* Raise an error when a function parameter isn't read. */,
-
-		/* Completeness */
-		"skipLibCheck": true /* Skip type checking all .d.ts files. */
+		"target": "es2016",
+		"module": "commonjs",
+		"rootDir": "./src",
+		"outDir": "./dist",
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"strict": true,
+		"noImplicitAny": true,
+		"useUnknownInCatchVariables": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"skipLibCheck": true
 	},
-	"include": ["src/**/*.ts"], // Include all TypeScript files in the src folder
-	"exclude": ["node_modules"] // Exclude dependencies
+	"include": ["src/**/*.ts"],
+	"exclude": ["node_modules"]
 }
