@@ -2,7 +2,13 @@ import { Student } from './student.model';
 import type { TStudent } from './student.types';
 
 const getAllStudentsFromDB = async () => {
-	const result = await Student.find();
+	const result = await Student.find()
+		.populate('admissionSemester')
+		.populate({
+			path: 'academicDepartment',
+			populate: { path: 'academicFaculty' },
+		});
+
 	return result;
 };
 
