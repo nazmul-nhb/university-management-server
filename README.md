@@ -1,6 +1,8 @@
 # University Management Server with Persian Bhai
 
-- [Live Server Link]
+- [Live Server Link](https://university-management-server-nhb.vercel.app)
+
+## TODO: Every places where ObjectId is used replaced that `id: string` with `id: ObjectId`
 
 ## Technologies (Packages) Used
 

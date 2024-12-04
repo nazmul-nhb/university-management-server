@@ -22,14 +22,14 @@ const saveStudentIntoDB = async (
 	try {
 		const studentId = await generateStudentId(semesterId, departmentId);
 
-		// create a user object
+		// * create a user object
 		const userData: Partial<TUser> = {
 			password,
 			role: 'student',
 			id: studentId,
 		};
 
-		// create a user
+		// * create a user
 		const newUser = await User.create([userData], { session });
 
 		if (!newUser[0]?._id) {
@@ -44,7 +44,7 @@ const saveStudentIntoDB = async (
 		payload.id = newUser[0].id;
 		payload.user = newUser[0]._id;
 
-		// Create the Student document
+		// * Create the Student document
 		const newStudent = await Student.create([payload], { session });
 
 		// Commit the transaction

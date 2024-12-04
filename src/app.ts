@@ -10,23 +10,25 @@ import sendResponse from './app/utilities/sendResponse';
 
 const app: Application = express();
 
-// Respect CORS Policy
+// * Respect CORS Policy
 app.use(cors());
-// Use JSON Parser
+// * Use JSON Parser
 app.use(express.json());
 
-// Root/Test Route
+// TODO: Every places where ObjectId is used replaced that `id: string` with `id: ObjectId`
+
+// * Root/Test Route
 app.get('/', (_req: Request, res: Response) => {
 	sendResponse(res, 200, 'Server is Running! 🏃');
 });
 
-// Application Routes
+// * Application Routes
 app.use('/api', router);
 
-// Error handler for 404
+// * Error handler for 404
 app.use(handleNotFound);
 
-// Global Error Handler
+// * Global Error Handler
 app.use(handleGlobalError);
 
 export default app;
