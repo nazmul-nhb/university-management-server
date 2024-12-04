@@ -11,13 +11,16 @@ const saveStudentIntoDB = async (
 	password: string = configs.defaultPassword,
 	payload: TStudent,
 ) => {
+	const semesterId = payload.admissionSemester.toString();
+	const departmentId = payload.academicDepartment.toString();
+
 	const session = await startSession();
+
+	// * Should start session outside try-catch block
 	session.startTransaction();
 
 	try {
-		const studentId = await generateStudentId(
-			payload.admissionSemester.toString(),
-		);
+		const studentId = await generateStudentId(semesterId, departmentId);
 
 		// create a user object
 		const userData: Partial<TUser> = {
