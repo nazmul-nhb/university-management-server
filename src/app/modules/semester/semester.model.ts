@@ -53,4 +53,19 @@ semesterSchema.pre('save', async function (next) {
 	next();
 });
 
+semesterSchema.pre('findOneAndUpdate', async function (next) {
+	const query = this.getQuery();
+	const semesterExists = await Semester.findOne(query);
+
+	if (!semesterExists) {
+		throw new ErrorWithStatus(
+			'SemesterNotFound',
+			`'This semester does not exist!'`,
+			404,
+		);
+	}
+
+	next();
+});
+
 export const Semester = model<TSemester>('Semester', semesterSchema);

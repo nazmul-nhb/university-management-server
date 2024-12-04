@@ -18,7 +18,7 @@ const getAllStudentsFromDB = async () => {
 
 /**
  *
- * @param id The id field in student doc
+ * @param id The value for `id` field in student doc
  */
 const getSingleStudentFromDB = async (id: string) => {
 	const result = await Student.findOne({ id })
@@ -33,7 +33,7 @@ const getSingleStudentFromDB = async (id: string) => {
 
 /**
  *
- * @param id The id field in student doc
+ * @param id The value for `id` field in student doc
  */
 const updateStudentInDB = async (id: string, payload: Partial<TStudent>) => {
 	const flattener = new PayloadFlattener(payload);
@@ -50,12 +50,12 @@ const updateStudentInDB = async (id: string, payload: Partial<TStudent>) => {
 
 /**
  *
- * @param id The id field in student doc
+ * @param id The value for `id` field in student doc
  */
 const deleteStudentFromDB = async (id: string) => {
 	const session = await startSession();
 
-	// * Should start session outside try-catch block
+	// ? Should start session outside try-catch block
 	session.startTransaction();
 
 	try {

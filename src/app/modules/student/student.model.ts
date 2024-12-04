@@ -6,6 +6,7 @@ import type {
 	TStudent,
 	TUserName,
 } from './student.types';
+import { ErrorWithStatus } from '../../classes/ErrorWithStatus';
 
 const userNameSchema = new Schema<TUserName>({
 	firstName: {
@@ -185,5 +186,20 @@ studentSchema.statics.isUserExists = async function (id: string) {
 	const existingUser = await Student.findOne({ id });
 	return existingUser;
 };
+
+studentSchema.pre('findOneAndUpdate', async function (next) {
+	const query = this.getQuery();
+	const studentExists = await Student.findOne(query);
+
+	if (!studentExists) {
+		throw new ErrorWithStatus(
+			'StudentNotFound',
+			`'This student does not exist!'`,
+			404,
+		);
+	}
+
+	next();
+});
 
 export const Student = model<TStudent, StudentModel>('Student', studentSchema);

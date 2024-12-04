@@ -1,7 +1,8 @@
-import type { ErrorRequestHandler, RequestHandler } from 'express';
-import { ErrorWithStatus } from '../classes/ErrorWithStatus';
+import chalk from 'chalk';
 import parseError from '../utilities/parseError';
 import sendResponse from '../utilities/sendResponse';
+import { ErrorWithStatus } from '../classes/ErrorWithStatus';
+import type { ErrorRequestHandler, RequestHandler } from 'express';
 
 /**
  * Middleware to Handle Route/Method Not Found Errors
@@ -27,7 +28,7 @@ export const handleGlobalError: ErrorRequestHandler = (
 	const { errorMessage, statusCode } = parseError(error);
 
 	// * Log error msg in the server console
-	console.error(`🛑 Error: ${errorMessage}`);
+	console.error(chalk.redBright(`🛑 Error: ${errorMessage}`));
 
 	// console.error(error);
 
