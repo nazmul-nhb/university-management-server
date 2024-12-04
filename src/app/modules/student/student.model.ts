@@ -182,9 +182,31 @@ studentSchema.pre('aggregate', function (next) {
 });
 
 //creating a custom static method
-studentSchema.statics.isUserExists = async function (id: string) {
+studentSchema.statics.doesUserExist = async function (id: string) {
 	const existingUser = await Student.findOne({ id });
 	return existingUser;
+};
+
+studentSchema.statics.countByDept = async function (semesterId, departmentId) {
+	const studentCount = await Student.countDocuments({
+		admissionSemester: semesterId,
+		academicDepartment: departmentId,
+	});
+
+	return studentCount;
+
+	/**
+	 * * All Fixed!
+	 * ? This design has a serious flaw! What if a student admits into a new semester or in another dept. or both? - * Fixed
+	 * ? The ID will still be an increment of the previous id, no matter which semester. - * Fixed
+	 * ? Each semester should have started with 0001 id for each department. - * Fixed
+	 * ? Operation should be run in Student Collection when department model is created! - * Fixed
+	 * ? New Issue : ID should have department code at the beginning - * Fixed
+	 * ! Or Each Department should have separate collection to avoid conflict
+	 *
+	 * ? Serious Issue : ID must have department code included. - * Fixed
+	 * ? Otherwise there will be conflict with IDs of students from different departments. - * Fixed
+	 */
 };
 
 studentSchema.pre('findOneAndUpdate', async function (next) {
