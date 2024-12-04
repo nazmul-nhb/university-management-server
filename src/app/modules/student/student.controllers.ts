@@ -26,7 +26,7 @@ const getSingleStudent = catchAsync(async (req, res) => {
 const updateStudent = catchAsync(async (req, res) => {
 	const student = await studentServices.updateStudentInDB(
 		req.params.id,
-		req.body,
+		req.body.student,
 	);
 
 	if (!student) {

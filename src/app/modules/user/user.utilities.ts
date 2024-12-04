@@ -17,6 +17,8 @@ const findLastStudentId = async (semesterId: string, departmentId: string) => {
 	 * ! The ID will still be an increment of the previous id, no matter which semester. - * Fixed
 	 * ! Each semester should have started with 0001 id for each department. - * Fixed
 	 * ! Operation should be run in Student Collection when department model is created! - * Fixed
+	 * ? New Issue : ID should have department code at the beginning
+	 * ? Or Each Department should have separate collection to avoid conflict 
 	 */
 
 	return lastStudent?.id ? lastStudent.id.substring(6) : null;
@@ -46,6 +48,8 @@ export const generateStudentId = async (
 
 	const incrementedId = (Number(currentId) + 1).toString().padStart(4, '0');
 
+	// ! Serious Issue : ID must have department code included.
+	// ! Otherwise there will be conflict with IDs of students from different departments.
 	const finalId = `${year}${code}${incrementedId}`;
 
 	return finalId;

@@ -16,7 +16,7 @@ const getAllStudentsFromDB = async () => {
 };
 
 const getSingleStudentFromDB = async (id: string) => {
-	const result = await Student.findById(id)
+	const result = await Student.findById(id) // TODO: Find by generated ID
 		.populate('admissionSemester')
 		.populate({
 			path: 'academicDepartment',
@@ -29,6 +29,7 @@ const getSingleStudentFromDB = async (id: string) => {
 const updateStudentInDB = async (id: string, payload: Partial<TStudent>) => {
 	const result = await Student.findOneAndUpdate({ _id: id }, payload, {
 		new: true,
+		upsert: true,
 	});
 
 	return result;
@@ -36,7 +37,7 @@ const updateStudentInDB = async (id: string, payload: Partial<TStudent>) => {
 
 /**
  *
- * @param id `user` id that is lined with user
+ * @param id `user` id that is linked with user
  */
 const deleteStudentFromDB = async (id: string) => {
 	const session = await startSession();

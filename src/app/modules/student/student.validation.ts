@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { createPartialSchema } from '../../utilities/partialSchema';
 
 const userNameValidationSchema = z.object({
 	firstName: z
@@ -47,7 +48,7 @@ export const creationSchema = z.object({
 	}),
 });
 
-const updateSchema = creationSchema.partial();
+const updateSchema = createPartialSchema(creationSchema);
 
 export const studentValidations = {
 	creationSchema,
