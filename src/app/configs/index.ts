@@ -1,4 +1,5 @@
 import path from 'path';
+import chalk from 'chalk';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 
@@ -18,27 +19,29 @@ export const connectDB = async (): Promise<void> => {
 
 		await mongoose.connect(mongoUri);
 
-		console.log('🟢 MongoDB is Connected!');
+		console.info(chalk.cyanBright('🔗 MongoDB is Connected!'));
 
 		// Listen for established connection
 		mongoose.connection.on('connected', () => {
-			console.log('🟢 MongoDB is Connected!');
+			console.info(chalk.cyanBright('🔗 MongoDB is Connected!'));
 		});
 
 		// Listen for connection errors
 		mongoose.connection.on('error', (err) => {
-			console.error('🛑 MongoDB Connection Error: ', err.message);
+			console.error(
+				chalk.red(`⛔ MongoDB Connection Error: ${err.message}`),
+			);
 		});
 
 		// Optional: Listen for disconnection
 		mongoose.connection.on('disconnected', () => {
-			console.error('🔴 MongoDB is Disconnected!');
+			console.error(chalk.red('⛔ MongoDB is Disconnected!'));
 		});
 	} catch (error) {
 		if (error instanceof Error) {
-			console.error('🚫 MongoDB Error: ', error.message);
+			console.error(chalk.red(`🚫 MongoDB Error: ${error.message}`));
 		} else {
-			console.error('🛑 Unknown Error Occurred!');
+			console.error(chalk.red('🛑 Unknown Error Occurred!'));
 		}
 	}
 };

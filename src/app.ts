@@ -15,7 +15,7 @@ app.use(cors());
 // * Use JSON Parser
 app.use(express.json());
 
-// TODO: Every places where ObjectId is used replaced that `id: string` with `id: ObjectId`
+// TODO: Every place where ObjectId is used as type `string`, replace that `id: string` with `id: ObjectId`
 
 // * Root/Test Route
 app.get('/', (_req: Request, res: Response) => {

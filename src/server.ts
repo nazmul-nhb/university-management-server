@@ -1,4 +1,5 @@
 import app from './app';
+import chalk from 'chalk';
 import configs from './app/configs';
 
 const bootStrap = async () => {
@@ -8,13 +9,17 @@ const bootStrap = async () => {
 
 		// Listen to the Server
 		app.listen(configs.port, () => {
-			console.log('🟢 Server is Listening on Port: ', configs.port);
+			console.info(
+				chalk.yellowBright(
+					`👂 Server is Listening on Port: ${configs.port}`,
+				),
+			);
 		});
 	} catch (error) {
 		if (error instanceof Error) {
-			console.error('🚫 Error Occurred: ', error.message);
+			console.error(chalk.red(`🚫 Error Occurred: ${error.message}`));
 		} else {
-			console.error('🛑 Unknown Error Occurred!');
+			console.error(chalk.red('🛑 Unknown Error Occurred!'));
 		}
 	}
 };

@@ -47,13 +47,13 @@ const saveStudentIntoDB = async (
 		// * Create the Student document
 		const newStudent = await Student.create([payload], { session });
 
-		// Commit the transaction
+		// * Commit the transaction
 		await session.commitTransaction();
 		session.endSession();
 
 		return newStudent[0];
 	} catch (error) {
-		// Rollback the transaction
+		// * Rollback the transaction
 		await session.abortTransaction();
 		session.endSession();
 

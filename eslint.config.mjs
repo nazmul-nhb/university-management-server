@@ -68,7 +68,7 @@ export default [
     rules: { "no-unused-vars": "off" },
   },
   {
-    files: ["src/server.ts", "src/app/configs/**/*.ts"],
+    files: ["src/server.ts"],
     rules: { "no-console": "off" },
   },
   {

@@ -2,8 +2,6 @@
 
 - [Live Server Link](https://university-management-server-nhb.vercel.app)
 
-## TODO: Every places where ObjectId is used replaced that `id: string` with `id: ObjectId`
-
 ## Technologies (Packages) Used
 
 - `TypeScript`
@@ -13,6 +11,9 @@
 - `cors`
 - `dotenv`
 - `bcrypt`
+- `chalk`
+- `progress-indicator`
+- `execa`
 
 ## Run the Server Locally
 
