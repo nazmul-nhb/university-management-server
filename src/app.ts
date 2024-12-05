@@ -8,10 +8,12 @@ import {
 import router from './app/routes';
 import sendResponse from './app/utilities/sendResponse';
 
+// Create an Express App
 const app: Application = express();
 
 // * Respect CORS Policy
 app.use(cors());
+
 // * Use JSON Parser
 app.use(express.json());
 
