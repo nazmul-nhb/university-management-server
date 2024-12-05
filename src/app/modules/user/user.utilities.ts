@@ -1,16 +1,20 @@
 import { Student } from '../student/student.model';
+import { Semester } from '../semester/semester.model';
+import { Department } from '../department/department.model';
 import { ErrorWithStatus } from '../../classes/ErrorWithStatus';
-import { semesterServices } from '../semester/semester.services';
-import { departmentServices } from '../department/department.services';
 
 export const generateStudentId = async (
 	semesterId: string,
 	departmentId: string,
 ) => {
-	// Find semester & department info
-	const [semester, department] = await Promise.all([
-		semesterServices.getSingleSemesterFromDB(semesterId),
-		departmentServices.getSingleDepartmentFromDB(departmentId),
+	// Find semester & department info & student count from specific department
+	const [semester, department, studentCount] = await Promise.all([
+		Semester.findById(semesterId).select('year code -_id').lean(),
+		Department.findById(departmentId).select('code -_id').lean(),
+		Student.countDocuments({
+			admissionSemester: semesterId,
+			academicDepartment: departmentId,
+		}),
 	]);
 
 	if (!semester) {
@@ -29,11 +33,10 @@ export const generateStudentId = async (
 		);
 	}
 
-	const { year, code } = semester;
+	const { year, code: semesterCode } = semester;
+	const { code: departmentCode } = department;
 
-	const currentCount = await Student.countByDept(semesterId, departmentId);
+	const nextId = (studentCount + 1).toString().padStart(4, '0');
 
-	const nextId = (currentCount + 1).toString().padStart(4, '0');
-
-	return `${department?.code}${year}${code}${nextId}`;
+	return `${departmentCode}${year}${semesterCode}${nextId}`;
 };
