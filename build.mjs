@@ -56,10 +56,14 @@ const getFileIcon = (filePath) => {
         const totalSizeInKB = totalSize.toFixed(2);
 
         const endTime = performance.now();
-        
+
         const buildTime = ((endTime - startTime) / 1000).toFixed(2);
 
-        console.info(chalk.green(`\n✓ Total Size: ${chalk.blueBright.bold(totalSizeInKB)} kB`));
+        const totalFiles = `Total Files: ${chalk.blueBright.bold(outputFiles.length)}`;
+
+        const totalFileSize = `Total Size: ${chalk.blueBright.bold(totalSizeInKB)} kB`;
+
+        console.info(chalk.green(`\n✓ ${totalFiles}; ${totalFileSize}`));
 
         console.info(chalk.green(`\n✓ Application was built in ${chalk.blueBright.bold(buildTime)} seconds!`));
     } catch (error) {
