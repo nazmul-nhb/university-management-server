@@ -32,7 +32,7 @@ bootStrap().catch(console.dir);
 process.on('unhandledRejection', () => {
 	console.error(
 		chalk.redBright(
-			`Unhandled Rejection Detected!\nServer is Shutting Down...`,
+			`🚫 Unhandled Rejection Detected!\n🛑 Server is Shutting Down...`,
 		),
 	);
 
@@ -48,7 +48,7 @@ process.on('unhandledRejection', () => {
 process.on('uncaughtException', () => {
 	console.error(
 		chalk.redBright(
-			`Uncaught Exception Detected!\nServer is Shutting Down...`,
+			`🚫 Uncaught Exception Detected!\n🛑 Server is Shutting Down...`,
 		),
 	);
 

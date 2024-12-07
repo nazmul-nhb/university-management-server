@@ -65,9 +65,10 @@ const deleteStudentFromDB = async (id: string) => {
 
 		if (!deletedStudent) {
 			throw new ErrorWithStatus(
-				'CannotDelete',
+				'Delete Error',
 				'Failed to delete student!',
 				400,
+				'student',
 			);
 		}
 
@@ -79,9 +80,10 @@ const deleteStudentFromDB = async (id: string) => {
 
 		if (!deletedUser) {
 			throw new ErrorWithStatus(
-				'CannotDelete',
+				'Delete Error',
 				'Failed to delete user!',
 				400,
+				'student',
 			);
 		}
 

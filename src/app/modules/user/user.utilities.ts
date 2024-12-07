@@ -19,17 +19,19 @@ export const generateStudentId = async (
 
 	if (!semester) {
 		throw new ErrorWithStatus(
-			'SemesterNotFound',
+			'Not Found Error',
 			`No Semester Matched with ${semesterId}`,
 			404,
+			'semester',
 		);
 	}
 
 	if (!department) {
 		throw new ErrorWithStatus(
-			'DepartmentNotFound',
+			'Not Found Error',
 			`No Department Matched with ${departmentId}`,
 			404,
+			'department',
 		);
 	}
 

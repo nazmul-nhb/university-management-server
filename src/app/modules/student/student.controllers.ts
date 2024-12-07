@@ -14,9 +14,10 @@ const getSingleStudent = catchAsync(async (req, res) => {
 
 	if (!student) {
 		throw new ErrorWithStatus(
-			'StudentNotFound',
+			'Not Found Error',
 			`Student with id: ${req.params.id} not found!`,
 			404,
+			'student',
 		);
 	}
 
@@ -31,9 +32,10 @@ const updateStudent = catchAsync(async (req, res) => {
 
 	if (!student) {
 		throw new ErrorWithStatus(
-			'StudentNotUpdatable',
+			'Not Updatable Error',
 			`Student with id: ${req.params.id} not found!`,
 			404,
+			'student',
 		);
 	}
 

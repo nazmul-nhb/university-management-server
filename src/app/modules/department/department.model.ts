@@ -33,9 +33,10 @@ departmentSchema.pre('save', async function (next) {
 
 	if (departmentExists) {
 		throw new ErrorWithStatus(
-			'DepartmentExists',
+			'Duplicate Error',
 			`${this.name} already exists!`,
 			409,
+			'department',
 		);
 	}
 
@@ -48,9 +49,10 @@ departmentSchema.pre('findOneAndUpdate', async function (next) {
 
 	if (!departmentExists) {
 		throw new ErrorWithStatus(
-			'DepartmentNotFound',
+			'Not Found Error',
 			'This department does not exist!',
 			404,
+			'department',
 		);
 	}
 
