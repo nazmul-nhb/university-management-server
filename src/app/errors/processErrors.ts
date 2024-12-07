@@ -1,7 +1,7 @@
 import { typeGuards } from './errorGuards';
 import { Error as MongoError } from 'mongoose';
-import { handleZodErrors } from './zodErrors';
 import { mongoErrors } from './mongoErrors';
+import { handleZodErrors } from './zodErrors';
 import { genericErrors } from './genericErrors';
 import { ErrorWithStatus } from '../classes/ErrorWithStatus';
 import type { IErrorResponse } from '../types/interfaces';
