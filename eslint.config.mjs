@@ -47,7 +47,7 @@ export default [
         "caughtErrorsIgnorePattern": "^_",
         "destructuredArrayIgnorePattern": "^_",
         "varsIgnorePattern": "^_",
-        "ignoreRestSiblings": true
+        "ignoreRestSiblings": false
       }],
       "@typescript-eslint/no-unused-vars": [
         "error",
@@ -58,7 +58,7 @@ export default [
           "caughtErrorsIgnorePattern": "^_",
           "destructuredArrayIgnorePattern": "^_",
           "varsIgnorePattern": "^_",
-          "ignoreRestSiblings": true
+          "ignoreRestSiblings": false
         }
       ]
     },

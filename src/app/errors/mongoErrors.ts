@@ -13,15 +13,15 @@ export const handleValidationError = (
 	stack?: string,
 ): IErrorResponse => {
 	const errorSource: IErrorSource[] = Object.values(error.errors).map(
-		(val: MongoError.ValidatorError | MongoError.CastError) => ({
-			path: val.path,
-			message: val.message,
+		(err: MongoError.ValidatorError | MongoError.CastError) => ({
+			path: err.path,
+			message: err.message,
 		}),
 	);
 
 	return {
 		statusCode: 400,
-		name: error.name || 'Validation Error',
+		name: 'Validation Error',
 		errorSource,
 		stack,
 	};
@@ -36,11 +36,11 @@ export const handleCastError = (
 ): IErrorResponse => {
 	return {
 		statusCode: 400,
-		name: `Invalid ObjectId: “${error.value}” for “${error.path}”`,
+		name: `Invalid ObjectId!`,
 		errorSource: [
 			{
 				path: error.path,
-				message: `Invalid ObjectId value: ${error.value}`,
+				message: `Invalid ObjectId: “${error.value}” for “${error.path}”`,
 			},
 		],
 		stack,

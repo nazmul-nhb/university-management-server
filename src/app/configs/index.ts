@@ -48,6 +48,7 @@ export const connectDB = async (): Promise<void> => {
 
 export default {
 	port: process.env.PORT || 4242,
+	nodeEnvironment: process.env.NODE_ENV as string,
 	saltRounds: process.env.SALT_ROUNDS as string,
 	defaultPassword: process.env.DEFAULT_PASSWORD as string,
 	connectDB,
