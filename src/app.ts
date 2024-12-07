@@ -1,10 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import type { Application, Request, Response } from 'express';
-import {
-	handleGlobalError,
-	handleNotFound,
-} from './app/middlewares/errorHandlers';
+import { globalError, handleNotFound } from './app/middlewares/errorHandlers';
 import router from './app/routes';
 import sendResponse from './app/utilities/sendResponse';
 
@@ -31,6 +28,6 @@ app.use('/api', router);
 app.use(handleNotFound);
 
 // * Global Error Handler
-app.use(handleGlobalError);
+app.use(globalError);
 
 export default app;

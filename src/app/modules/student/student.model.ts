@@ -215,9 +215,10 @@ studentSchema.pre('findOneAndUpdate', async function (next) {
 
 	if (!studentExists) {
 		throw new ErrorWithStatus(
-			'StudentNotFound',
+			'Not Found Error',
 			`'This student does not exist!'`,
 			404,
+			'student',
 		);
 	}
 

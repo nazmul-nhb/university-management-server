@@ -34,9 +34,10 @@ const saveStudentIntoDB = async (
 
 		if (!newUser[0]?._id) {
 			throw new ErrorWithStatus(
-				'UserCreationFailed!',
+				'Creation Error!',
 				'Failed to create user!',
 				422,
+				'user',
 			);
 		}
 

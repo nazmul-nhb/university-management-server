@@ -7,9 +7,10 @@ const saveSemesterIntoDB = async (payload: TSemester) => {
 	// Check semester name-code combination
 	if (semesterNameCodeMapper[payload.name] !== payload.code) {
 		throw new ErrorWithStatus(
-			'InvalidSemester',
+			'Invalid Match Error',
 			'Invalid Semester Code!',
 			422,
+			'semester',
 		);
 	}
 
@@ -36,9 +37,10 @@ const updateSemesterInDB = async (id: string, payload: Partial<TSemester>) => {
 		semesterNameCodeMapper[payload.name] !== payload.code
 	) {
 		throw new ErrorWithStatus(
-			'InvalidSemester',
+			'Invalid Match Error',
 			'Invalid Semester Code!',
 			422,
+			'semester',
 		);
 	}
 

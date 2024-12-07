@@ -22,9 +22,10 @@ facultySchema.pre('findOneAndUpdate', async function (next) {
 
 	if (!facultyExists) {
 		throw new ErrorWithStatus(
-			'FacultyNotFound',
+			'Not Found Error',
 			`'This faculty does not exist!'`,
 			404,
+			'faculty',
 		);
 	}
 

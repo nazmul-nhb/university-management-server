@@ -1,6 +1,5 @@
 import chalk from 'chalk';
-import parseError from '../utilities/parseError';
-import sendResponse from '../utilities/sendResponse';
+import processErrors from '../errors/processErrors';
 import { ErrorWithStatus } from '../classes/ErrorWithStatus';
 import type { ErrorRequestHandler, RequestHandler } from 'express';
 
@@ -9,9 +8,10 @@ import type { ErrorRequestHandler, RequestHandler } from 'express';
  */
 export const handleNotFound: RequestHandler = (req, _res, next) => {
 	const error = new ErrorWithStatus(
-		'NotFoundError',
+		'Not Found Error',
 		`Requested End-Point “${req.method}: ${req.url}” Not Found!`,
 		404,
+		req.url,
 	);
 	next(error);
 };
@@ -19,16 +19,17 @@ export const handleNotFound: RequestHandler = (req, _res, next) => {
 /**
  * Middleware to Handle Global Errors
  */
-export const handleGlobalError: ErrorRequestHandler = (
-	error: unknown,
-	_req,
-	res,
-	next,
-) => {
-	const { errorMessage, statusCode } = parseError(error);
+export const globalError: ErrorRequestHandler = (error, _req, res, next) => {
+	const errorResponse = processErrors(error);
 
 	// * Log error msg in the server console
-	console.error(chalk.redBright(`🛑 Error: ${errorMessage}`));
+	console.error(
+		chalk.redBright(
+			`🛑 Error: ${errorResponse.errorSource
+				.map((err) => err.message)
+				.join('; ')}`,
+		),
+	);
 
 	// console.error(error);
 
@@ -39,5 +40,5 @@ export const handleGlobalError: ErrorRequestHandler = (
 	}
 
 	// * Send error response with status code
-	sendResponse(res, statusCode, errorMessage);
+	res.status(errorResponse.statusCode).json(errorResponse);
 };

@@ -22,6 +22,26 @@ export interface IParserError {
 	type: string;
 }
 
+export interface IGenericError {
+	errorMessage: string;
+	statusCode: number;
+}
+export interface INestedError {
+	errors: Record<string, unknown>;
+}
+
+export interface IErrorSource {
+	path: string | number;
+	message: string;
+}
+
+export interface IErrorResponse {
+	statusCode: number;
+	name: string;
+	errorSource: IErrorSource[];
+	stack?: string;
+}
+
 export interface IRoute {
 	path: string;
 	route: Router;

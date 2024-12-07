@@ -22,9 +22,10 @@ const getSingleSemester = catchAsync(async (req, res) => {
 
 	if (!semester) {
 		throw new ErrorWithStatus(
-			'SemesterNotFound',
+			'Not Found Error',
 			`Semester with id: ${req.params.id} not found!`,
 			404,
+			'semester',
 		);
 	}
 
@@ -39,9 +40,10 @@ const updateSemester = catchAsync(async (req, res) => {
 
 	if (!semester) {
 		throw new ErrorWithStatus(
-			'SemesterNotUpdatable',
+			'Not Updatable Error',
 			`Semester with id: ${req.params.id} not found!`,
 			404,
+			'semester',
 		);
 	}
 

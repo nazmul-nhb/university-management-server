@@ -44,9 +44,10 @@ semesterSchema.pre('save', async function (next) {
 
 	if (semesterExists) {
 		throw new ErrorWithStatus(
-			'SemesterExists',
+			'Duplicate Error',
 			`${this.name} Semester Already Exists for Year ${this.year}!`,
 			409,
+			'semester',
 		);
 	}
 
@@ -59,9 +60,10 @@ semesterSchema.pre('findOneAndUpdate', async function (next) {
 
 	if (!semesterExists) {
 		throw new ErrorWithStatus(
-			'SemesterNotFound',
+			'Not Found Error',
 			`'This semester does not exist!'`,
 			404,
+			'semester',
 		);
 	}
 
