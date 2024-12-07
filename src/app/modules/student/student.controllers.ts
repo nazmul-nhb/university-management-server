@@ -3,8 +3,8 @@ import catchAsync from '../../utilities/catchAsync';
 import sendResponse from '../../utilities/sendResponse';
 import { studentServices } from './student.services';
 
-const getAllStudents = catchAsync(async (_req, res) => {
-	const students = await studentServices.getAllStudentsFromDB();
+const getAllStudents = catchAsync(async (req, res) => {
+	const students = await studentServices.getAllStudentsFromDB(req.query);
 
 	sendResponse(res, 200, 'Students are retrieved successfully', students);
 });

@@ -4,14 +4,29 @@ import { User } from '../user/user.model';
 import type { TStudent } from './student.types';
 import { ErrorWithStatus } from '../../classes/ErrorWithStatus';
 import { flattenPayload } from '../../utilities/flattenPayload';
+import { QueryBuilder } from '../../classes/QueryBuilder';
 
-const getAllStudentsFromDB = async () => {
-	const result = await Student.find()
-		.populate('admissionSemester')
-		.populate({
-			path: 'academicDepartment',
-			populate: { path: 'academicFaculty' },
-		});
+const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
+	const searchableFields = ['email', 'name.firstName', 'presentAddress'];
+
+	const studentQuery = new QueryBuilder(
+		Student.find()
+			.populate('admissionSemester')
+			.populate({
+				path: 'academicDepartment',
+				populate: {
+					path: 'academicFaculty',
+				},
+			}),
+		query,
+	)
+		.search(searchableFields)
+		.filter()
+		.sort()
+		.paginate()
+		.fields();
+
+	const result = await studentQuery.modelQuery;
 
 	return result;
 };
