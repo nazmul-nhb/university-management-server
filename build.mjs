@@ -14,7 +14,7 @@ const estimator = progressEstimator({ storagePath: join(__dirname, '.estimator')
 // Function to determine icon based on file extension
 const getFileIcon = (filePath) => {
     const ext = filePath.split('.').pop()?.toLowerCase();
-    return ext === 'js' ? '📄' : '📁'; // Add other icons if needed
+    return ext === 'js' ? '📄' : '📁';
 };
 
 (async () => {

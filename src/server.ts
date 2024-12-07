@@ -1,6 +1,9 @@
 import app from './app';
 import chalk from 'chalk';
 import configs from './app/configs';
+import type { Server } from 'http';
+
+let server: Server;
 
 const bootStrap = async () => {
 	try {
@@ -8,7 +11,7 @@ const bootStrap = async () => {
 		await configs.connectDB();
 
 		// Listen to the Server
-		app.listen(configs.port, () => {
+		server = app.listen(configs.port, () => {
 			console.info(
 				chalk.yellowBright(
 					`👂 Server is Listening on Port: ${configs.port}`,
@@ -25,3 +28,29 @@ const bootStrap = async () => {
 };
 
 bootStrap().catch(console.dir);
+
+process.on('unhandledRejection', () => {
+	console.error(
+		chalk.redBright(
+			`Unhandled Rejection Detected!\nServer is Shutting Down...`,
+		),
+	);
+
+	if (server) {
+		server.close(() => {
+			process.exit(1);
+		});
+	}
+
+	process.exit(1);
+});
+
+process.on('uncaughtException', () => {
+	console.error(
+		chalk.redBright(
+			`Uncaught Exception Detected!\nServer is Shutting Down...`,
+		),
+	);
+
+	process.exit(1);
+});
