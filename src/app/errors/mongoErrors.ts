@@ -40,7 +40,7 @@ export const handleCastError = (
 		errorSource: [
 			{
 				path: error.path,
-				message: `Invalid ObjectId: “${error.value}” for “${error.path}”`,
+				message: `Invalid ObjectId “${error.value}”; Reason: “${error?.reason}”`,
 			},
 		],
 		stack,

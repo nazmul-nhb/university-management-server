@@ -22,10 +22,6 @@ export interface IParserError {
 	type: string;
 }
 
-export interface IGenericError {
-	errorMessage: string;
-	statusCode: number;
-}
 export interface INestedError {
 	errors: Record<string, unknown>;
 }

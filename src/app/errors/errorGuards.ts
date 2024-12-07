@@ -1,4 +1,3 @@
-import { ZodError } from 'zod';
 import { MongooseError } from 'mongoose';
 import type { CastError } from 'mongoose';
 import type {
@@ -6,13 +5,6 @@ import type {
 	IParserError,
 	INestedError,
 } from '../types/interfaces';
-
-/**
- * Type guard to check if an error is a Zod Validation Error.
- */
-export const isZodError = (error: unknown): error is ZodError => {
-	return error instanceof ZodError;
-};
 
 /**
  * Type guard to check if an error is a MongoDB Duplicate Error.
@@ -77,9 +69,4 @@ export const isParserError = (error: unknown): error is IParserError => {
 	);
 };
 
-export const typeGuards = {
-	isCastError,
-	isMongoDuplicateError,
-	isParserError,
-	isZodError,
-};
+export const typeGuards = { isCastError, isMongoDuplicateError, isParserError };

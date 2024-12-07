@@ -1,7 +1,8 @@
+import { ZodError } from 'zod';
 import { typeGuards } from './errorGuards';
+import { handleZodErrors } from './zodErrors';
 import { Error as MongoError } from 'mongoose';
 import { mongoErrors } from './mongoErrors';
-import { handleZodErrors } from './zodErrors';
 import { genericErrors } from './genericErrors';
 import { ErrorWithStatus } from '../classes/ErrorWithStatus';
 import type { IErrorResponse } from '../types/interfaces';
@@ -14,7 +15,7 @@ const processErrors = (error: unknown): IErrorResponse => {
 	const stack = error instanceof Error ? error.stack : 'Stack Not Available!';
 
 	// Zod Validation Error
-	if (typeGuards.isZodError(error)) {
+	if (error instanceof ZodError) {
 		return handleZodErrors(error, stack);
 	}
 	// MongoDB Duplicate Error
@@ -27,10 +28,7 @@ const processErrors = (error: unknown): IErrorResponse => {
 	}
 	// Mongoose CastError
 	else if (typeGuards.isCastError(error)) {
-		return mongoErrors.handleCastError(
-			error as MongoError.CastError,
-			stack,
-		);
+		return mongoErrors.handleCastError(error, stack);
 	}
 	// Express Body Parser Error
 	else if (typeGuards.isParserError(error)) {
@@ -50,7 +48,7 @@ const processErrors = (error: unknown): IErrorResponse => {
 		statusCode: 500,
 		name: 'Unknown Error!',
 		errorSource: [
-			{ path: 'unknown', message: 'An Unknown Error Occurred' },
+			{ path: 'unknown', message: 'An Unknown Error Occurred!' },
 		],
 		stack,
 	};
