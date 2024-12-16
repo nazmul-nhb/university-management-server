@@ -7,6 +7,7 @@ import { facultyRoutes } from '../modules/faculty/faculty.routes';
 import { departmentRoutes } from '../modules/department/department.routes';
 import { courseRoutes } from '../modules/course/course.routes';
 import { adminRoutes } from '../modules/admin/admin.routes';
+import { teacherRoutes } from '../modules/teacher/teacher.routes';
 
 const router = Router();
 
@@ -38,6 +39,10 @@ const routes: IRoute[] = [
 	{
 		path: '/admins',
 		route: adminRoutes,
+	},
+	{
+		path: '/teachers',
+		route: teacherRoutes,
 	},
 ];
 

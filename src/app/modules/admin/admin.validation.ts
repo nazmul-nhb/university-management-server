@@ -1,24 +1,20 @@
 import { z } from 'zod';
-import { bloodGroups, genders } from './admin.constants';
+import { bloodGroups, genders } from '../user/user.constants';
 import { createPartialSchema } from '../../utilities/partialSchema';
-
-const userNameValidation = z.object({
-	firstName: z.string().min(1).max(20),
-	middleName: z.string().max(20),
-	lastName: z.string().max(20),
-});
+import { userNameValidation } from '../user/user.validation';
+import type { TBloodGroup, TGender } from '../user/user.types';
 
 export const creationSchema = z.object({
 	password: z.string().max(20),
 	admin: z.object({
 		designation: z.string(),
 		name: userNameValidation,
-		gender: z.enum([...genders] as [string, ...string[]]),
+		gender: z.enum(genders as [TGender, ...TGender[]]),
 		dateOfBirth: z.string().optional(),
 		email: z.string().email(),
 		contactNo: z.string(),
 		emergencyContactNo: z.string(),
-		bloodGroup: z.enum([...bloodGroups] as [string, ...string[]]),
+		bloodGroup: z.enum(bloodGroups as [TBloodGroup, ...TBloodGroup[]]),
 		presentAddress: z.string(),
 		permanentAddress: z.string(),
 		profileImg: z.string(),

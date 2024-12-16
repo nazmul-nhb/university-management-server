@@ -4,9 +4,9 @@ import type {
 	TGuardian,
 	TLocalGuardian,
 	TStudent,
-	TUserName,
 } from './student.types';
 import { ErrorWithStatus } from '../../classes/ErrorWithStatus';
+import type { TUserName } from '../user/user.types';
 
 const userNameSchema = new Schema<TUserName>({
 	firstName: {

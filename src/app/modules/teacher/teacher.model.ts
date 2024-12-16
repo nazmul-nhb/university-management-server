@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import type { AdminModel, TAdmin } from './admin.types';
+import type { TeacherModel, TTeacher } from './teacher.types';
 import { bloodGroups, genders } from '../user/user.constants';
 import type { TUserName } from '../user/user.types';
 
@@ -22,7 +22,7 @@ const userNameSchema = new Schema<TUserName>({
 	},
 });
 
-const adminSchema = new Schema<TAdmin, AdminModel>(
+const teacherSchema = new Schema<TTeacher, TeacherModel>(
 	{
 		id: {
 			type: String,
@@ -81,6 +81,11 @@ const adminSchema = new Schema<TAdmin, AdminModel>(
 			required: [true, 'Permanent address is required'],
 		},
 		profileImg: { type: String },
+		academicDepartment: {
+			type: Schema.Types.ObjectId,
+			required: [true, 'User id is required'],
+			ref: 'User',
+		},
 		isDeleted: {
 			type: Boolean,
 			default: false,
@@ -94,7 +99,7 @@ const adminSchema = new Schema<TAdmin, AdminModel>(
 );
 
 // generating full name
-adminSchema.virtual('fullName').get(function () {
+teacherSchema.virtual('fullName').get(function () {
 	return (
 		this?.name?.firstName +
 		'' +
@@ -105,25 +110,25 @@ adminSchema.virtual('fullName').get(function () {
 });
 
 // filter out deleted documents
-adminSchema.pre('find', function (next) {
+teacherSchema.pre('find', function (next) {
 	this.find({ isDeleted: { $ne: true } });
 	next();
 });
 
-adminSchema.pre('findOne', function (next) {
+teacherSchema.pre('findOne', function (next) {
 	this.find({ isDeleted: { $ne: true } });
 	next();
 });
 
-adminSchema.pre('aggregate', function (next) {
+teacherSchema.pre('aggregate', function (next) {
 	this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
 	next();
 });
 
 //checking if user is already exist!
-adminSchema.statics.doesUserExist = async function (id: string) {
-	const existingUser = await Admin.findOne({ id });
+teacherSchema.statics.doesUserExist = async function (id: string) {
+	const existingUser = await Teacher.findOne({ id });
 	return existingUser;
 };
 
-export const Admin = model<TAdmin, AdminModel>('Admin', adminSchema);
+export const Teacher = model<TTeacher, TeacherModel>('Teacher', teacherSchema);

@@ -1,14 +1,14 @@
 import mongoose from 'mongoose';
 import { QueryBuilder } from '../../classes/QueryBuilder';
 import { ErrorWithStatus } from '../../classes/ErrorWithStatus';
+import { userSearchableFields } from '../user/user.constants';
 import { User } from '../user/user.model';
-import { adminSearchableFields } from './admin.constants';
 import type { TAdmin } from './admin.types';
 import { Admin } from './admin.model';
 
 const getAllAdminsFromDB = async (query: Record<string, unknown>) => {
 	const adminQuery = new QueryBuilder(Admin.find(), query)
-		.search(adminSearchableFields)
+		.search(userSearchableFields)
 		.filter()
 		.sort()
 		.paginate()

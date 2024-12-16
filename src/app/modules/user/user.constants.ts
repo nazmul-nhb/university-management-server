@@ -1,4 +1,4 @@
-import type { TBloodGroup, TGender } from "../../types";
+import type { TBloodGroup, TGender } from "./user.types";
 
 export const genders: TGender[] = ['male', 'female', 'other'];
 
@@ -13,7 +13,7 @@ export const bloodGroups: TBloodGroup[] = [
 	'O-',
 ];
 
-export const adminSearchableFields = [
+export const userSearchableFields = [
 	'email',
 	'id',
 	'contactNo',
