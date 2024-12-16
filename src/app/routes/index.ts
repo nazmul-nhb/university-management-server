@@ -1,11 +1,12 @@
 import { Router } from 'express';
+import type { IRoute } from '../types/interfaces';
 import { userRoutes } from '../modules/user/user.routes';
 import { semesterRoutes } from '../modules/semester/semester.routes';
-import type { IRoute } from '../types/interfaces';
 import { studentRoutes } from '../modules/student/student.routes';
 import { facultyRoutes } from '../modules/faculty/faculty.routes';
 import { departmentRoutes } from '../modules/department/department.routes';
 import { courseRoutes } from '../modules/course/course.routes';
+import { adminRoutes } from '../modules/admin/admin.routes';
 
 const router = Router();
 
@@ -33,6 +34,10 @@ const routes: IRoute[] = [
 	{
 		path: '/courses',
 		route: courseRoutes,
+	},
+	{
+		path: '/admins',
+		route: adminRoutes,
 	},
 ];
 
