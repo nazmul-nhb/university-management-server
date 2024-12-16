@@ -64,6 +64,7 @@ const courseTeacherSchema = new Schema<TCourseTeacher>({
 		unique: true,
 	},
 	teachers: [
+		// ! Problem in this logic of array type
 		{
 			type: Schema.Types.ObjectId,
 			ref: 'Teacher',

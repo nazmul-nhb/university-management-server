@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import { startSession } from 'mongoose';
 import { QueryBuilder } from '../../classes/QueryBuilder';
 import { ErrorWithStatus } from '../../classes/ErrorWithStatus';
 import { userSearchableFields } from '../user/user.constants';
@@ -44,7 +44,7 @@ const updateAdminInDB = async (id: string, payload: Partial<TAdmin>) => {
 };
 
 const deleteAdminFromDB = async (id: string) => {
-	const session = await mongoose.startSession();
+	const session = await startSession();
 
 	session.startTransaction();
 

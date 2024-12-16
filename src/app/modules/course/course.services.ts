@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import { startSession } from 'mongoose';
 import { QueryBuilder } from '../../classes/QueryBuilder';
 import { ErrorWithStatus } from '../../classes/ErrorWithStatus';
 import { courseSearchableFields } from './course.constants';
@@ -36,7 +36,7 @@ const getSingleCourseFromDB = async (id: string) => {
 const updateCourseInDB = async (id: string, payload: Partial<TCourse>) => {
 	const { preRequisiteCourses, ...remainingCourseData } = payload;
 
-	const session = await mongoose.startSession();
+	const session = await startSession();
 
 	session.startTransaction();
 
@@ -156,7 +156,7 @@ const assignTeachersWithCourseInDB = async (
 		id,
 		{
 			course: id,
-			$addToSet: { faculties: { $each: payload } },
+			$addToSet: { teachers: { $each: payload } }, // ! Problem in this logic
 		},
 		{
 			upsert: true,
@@ -173,7 +173,7 @@ const removeTeachersFromCourseFromDB = async (
 	const result = await CourseTeacher.findByIdAndUpdate(
 		id,
 		{
-			$pull: { faculties: { $in: payload } },
+			$pull: { teachers: { $in: payload } }, // ! Problem in this logic
 		},
 		{
 			new: true,
