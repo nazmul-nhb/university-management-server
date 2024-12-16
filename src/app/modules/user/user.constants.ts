@@ -1,4 +1,4 @@
-import type { TBloodGroup, TGender } from "./user.types";
+import type { TBloodGroup, TGender } from './user.types';
 
 export const genders: TGender[] = ['male', 'female', 'other'];
 

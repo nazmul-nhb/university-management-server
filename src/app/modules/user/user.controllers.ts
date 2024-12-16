@@ -18,7 +18,12 @@ const createAdmin = catchAsync(async (req, res) => {
 	sendResponse(res, 201, 'Student is created successfully!', newAdmin);
 });
 
-export const userControllers = {
-	createStudent,
-	createAdmin,
-};
+const createTeacher = catchAsync(async (req, res) => {
+	const { password, teacher } = req.body;
+
+	const newTeacher = await userServices.saveTeacherInDB(password, teacher);
+
+	sendResponse(res, 201, 'Student is created successfully!', newTeacher);
+});
+
+export const userControllers = { createStudent, createAdmin, createTeacher };

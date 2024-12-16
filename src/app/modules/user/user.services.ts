@@ -3,11 +3,18 @@ import { Student } from '../student/student.model';
 import type { TStudent } from '../student/student.types';
 import type { TUser } from './user.types';
 import { User } from './user.model';
-import { generateAdminId, generateStudentId } from './user.utilities';
+import {
+	generateAdminId,
+	generateStudentId,
+	generateTeacherId,
+} from './user.utilities';
 import { startSession } from 'mongoose';
 import { ErrorWithStatus } from '../../classes/ErrorWithStatus';
 import type { TAdmin } from '../admin/admin.types';
 import { Admin } from '../admin/admin.model';
+import type { TTeacher } from '../teacher/teacher.types';
+import { Department } from '../department/department.model';
+import { Teacher } from '../teacher/teacher.model';
 
 const saveStudentInDB = async (
 	password: string = configs.defaultPassword,
@@ -129,7 +136,80 @@ const saveAdminInDB = async (
 	}
 };
 
+const saveTeacherInDB = async (
+	password: string = configs.defaultPassword,
+	payload: TTeacher,
+) => {
+	// find academic department info
+	const academicDepartment = await Department.findById(
+		payload.academicDepartment,
+	);
+
+	if (!academicDepartment) {
+		throw new ErrorWithStatus(
+			'Not Found Error!',
+			'Cannot find Department!',
+			404,
+			'department',
+		);
+	}
+
+	const session = await startSession();
+
+	session.startTransaction();
+
+	try {
+		const teacherId = await generateTeacherId();
+
+		// * create a user object
+		const userData: Partial<TUser> = {
+			password,
+			role: 'admin',
+			id: teacherId,
+		};
+
+		// create a user (transaction-1)
+		const newUser = await User.create([userData], { session }); // array
+
+		if (!newUser[0]?._id) {
+			throw new ErrorWithStatus(
+				'Creation Error!',
+				'Failed to create user!',
+				422,
+				'user',
+			);
+		}
+
+		// set id , _id as user
+		payload.id = newUser[0].id;
+		payload.user = newUser[0]._id; //reference _id
+
+		// create a faculty (transaction-2)
+
+		const newTeacher = await Teacher.create([payload], { session });
+
+		if (!newTeacher[0]?.id) {
+			throw new ErrorWithStatus(
+				'Admin Creation Error!',
+				'Failed to create admin!',
+				422,
+				'admin',
+			);
+		}
+
+		await session.commitTransaction();
+		await session.endSession();
+
+		return newTeacher;
+	} catch (error) {
+		await session.abortTransaction();
+		await session.endSession();
+		throw error;
+	}
+};
+
 export const userServices = {
 	saveStudentInDB,
 	saveAdminInDB,
+	saveTeacherInDB,
 };

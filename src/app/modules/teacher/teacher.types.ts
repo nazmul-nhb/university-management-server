@@ -1,6 +1,6 @@
-import  type{ Model, Types } from 'mongoose';
+import type { Model, Types } from 'mongoose';
 import type { TBloodGroup, TGender } from '../user/user.types';
-import type  { TUserName } from '../user/user.types';
+import type { TUserName } from '../user/user.types';
 
 export type TTeacher = {
 	id: string;

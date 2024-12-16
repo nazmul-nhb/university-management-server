@@ -20,7 +20,7 @@ const userSchema = new Schema<TUser>(
 		},
 		role: {
 			type: String,
-			enum: ['student', 'faculty', 'admin'],
+			enum: ['student', 'teacher', 'admin'],
 		},
 		status: {
 			type: String,
