@@ -11,10 +11,10 @@ export type TCourse = {
 	code: number;
 	credits: number;
 	isDeleted?: boolean;
-	preRequisiteCourses: [TPreRequisiteCourses]; // ! Problem in this logic of array type
+	preRequisiteCourses: TPreRequisiteCourses[];
 };
 
 export type TCourseTeacher = {
 	course: Types.ObjectId;
-	teachers: [Types.ObjectId]; // ! Problem in this logic of array type
+	teachers: Types.ObjectId[];
 };

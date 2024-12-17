@@ -5,7 +5,7 @@ import type { TBloodGroup, TGender } from '../user/user.types';
 import { createPartialSchema } from '../../utilities/partialSchema';
 
 export const creationSchema = z.object({
-	password: z.string().max(20),
+	password: z.string().max(20).optional(),
 	teacher: z.object({
 		designation: z.string(),
 		name: userNameValidation,

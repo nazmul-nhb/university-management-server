@@ -58,7 +58,7 @@ export const handleDuplicateError = (
 		errorSource: [
 			{
 				path: key,
-				message: `Duplicate value for ${key}: ${error.keyValue[key]}`,
+				message: `Document exists with ${key}: ${error.keyValue[key]}`,
 			},
 		],
 		stack,

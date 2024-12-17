@@ -44,7 +44,7 @@ const courseSchema = new Schema<TCourse>(
 			trim: true,
 			required: true,
 		},
-		preRequisiteCourses: [preRequisiteCoursesSchema],
+		preRequisiteCourses: { type: [preRequisiteCoursesSchema], default: [] },
 		isDeleted: {
 			type: Boolean,
 			default: false,
@@ -63,13 +63,11 @@ const courseTeacherSchema = new Schema<TCourseTeacher>({
 		ref: 'Course',
 		unique: true,
 	},
-	teachers: [
-		// ! Problem in this logic of array type
-		{
-			type: Schema.Types.ObjectId,
-			ref: 'Teacher',
-		},
-	],
+	teachers: {
+		type: [Schema.Types.ObjectId],
+		ref: 'Teacher',
+		default: [],
+	},
 });
 
 export const CourseTeacher = model<TCourseTeacher>(

@@ -164,7 +164,7 @@ const saveTeacherInDB = async (
 		// * create a user object
 		const userData: Partial<TUser> = {
 			password,
-			role: 'admin',
+			role: 'teacher',
 			id: teacherId,
 		};
 
