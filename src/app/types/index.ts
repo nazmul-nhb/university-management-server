@@ -1,4 +1,5 @@
 export type TCollection =
+	| 'N/A'
 	| 'User'
 	| 'Student'
 	| 'Teacher'
