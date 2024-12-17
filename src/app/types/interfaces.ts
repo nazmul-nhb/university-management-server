@@ -1,4 +1,6 @@
 import type { Router } from 'express';
+import type { JwtPayload } from 'jsonwebtoken';
+import type { TUserRole } from '../modules/user/user.types';
 
 export interface IDuplicateError {
 	errorResponse: {
@@ -41,4 +43,9 @@ export interface IErrorResponse {
 export interface IRoute {
 	path: string;
 	route: Router;
+}
+
+export interface IJwtPayload extends JwtPayload {
+	role: TUserRole;
+	userId: string;
 }

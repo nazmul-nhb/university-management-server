@@ -25,6 +25,6 @@ export const userSearchableFields = [
 
 export const USER_ROLE = {
 	student: 'student',
-	faculty: 'faculty',
+	teacher: 'teacher',
 	admin: 'admin',
 } as const;

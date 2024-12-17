@@ -1,49 +1,19 @@
 import bcrypt from 'bcrypt';
-import type { TLoginUser } from './auth.types';
+import type {
+	TChangePassword,
+	TLoginResponse,
+	TokenResponse,
+	TUserLogin,
+} from './auth.types';
 import { User } from '../user/user.model';
 import { ErrorWithStatus } from '../../classes/ErrorWithStatus';
-import { createToken } from './auth.utilities';
+import type { IJwtPayload } from '../../types/interfaces';
+import { createToken, validateUser, verifyToken } from './auth.utilities';
 import configs from '../../configs';
-import type { JwtPayload } from 'jsonwebtoken';
-import jwt from 'jsonwebtoken';
 
-const loginUser = async (payload: TLoginUser) => {
+const loginUser = async (payload: TUserLogin): Promise<TLoginResponse> => {
 	// checking if the user is exist
-	const user = await User.checkUserExistenceByCustomId(payload.id);
-
-	if (!user) {
-		throw new ErrorWithStatus(
-			'Not Found Error',
-			`No user found with id: ${payload.id}!`,
-			404,
-			'user',
-		);
-	}
-	// checking if the user is already deleted
-
-	const isDeleted = user?.isDeleted;
-
-	if (isDeleted) {
-		throw new ErrorWithStatus(
-			'User Deleted',
-			`User with id: ${payload.id} is deleted!`,
-			403,
-			'user',
-		);
-	}
-
-	// checking if the user is blocked
-
-	const userStatus = user?.status;
-
-	if (userStatus === 'blocked') {
-		throw new ErrorWithStatus(
-			'User Blocked',
-			`User with id: ${payload.id} is blocked!`,
-			403,
-			'user',
-		);
-	}
+	const user = await validateUser(payload.id);
 
 	//checking if the password is correct
 
@@ -62,7 +32,7 @@ const loginUser = async (payload: TLoginUser) => {
 	}
 
 	//create token and sent to the  client
-	const jwtPayload = {
+	const jwtPayload: IJwtPayload = {
 		userId: user.id,
 		role: user.role,
 	};
@@ -87,40 +57,11 @@ const loginUser = async (payload: TLoginUser) => {
 };
 
 const changePassword = async (
-	userData: JwtPayload,
-	payload: { oldPassword: string; newPassword: string },
-) => {
+	userData: IJwtPayload,
+	payload: TChangePassword,
+): Promise<null> => {
 	// checking if the user is exist
-	const user = await User.checkUserExistenceByCustomId(userData.userId);
-
-	if (!user) {
-		throw new ErrorWithStatus(
-			'Not Found Error',
-			`User with id ${userData.userId} not found!`,
-			404,
-			'user',
-		);
-	}
-
-	// checking if the user is already deleted
-	if (user?.isDeleted) {
-		throw new ErrorWithStatus(
-			'User Deleted',
-			`User with id ${user.id} is deleted!`,
-			403,
-			'user',
-		);
-	}
-
-	// checking if the user is blocked
-	if (user?.status === 'blocked') {
-		throw new ErrorWithStatus(
-			'Not Matched Error',
-			`User with id ${user.id} is blocked!`,
-			403,
-			'user',
-		);
-	}
+	const user = await validateUser(userData.userId);
 
 	const passwordMatched = await User.isPasswordMatched(
 		payload.oldPassword,
@@ -157,61 +98,10 @@ const changePassword = async (
 	return null;
 };
 
-const refreshToken = async (token: string) => {
+const refreshToken = async (token: string): Promise<TokenResponse> => {
 	// checking if the given token is valid
-	const decoded = jwt.verify(token, configs.refreshSecret) as JwtPayload;
-
-	const { userId, iat } = decoded;
-
-	// checking if the user is exist
-	const user = await User.checkUserExistenceByCustomId(userId);
-
-	if (!user) {
-		throw new ErrorWithStatus(
-			'Not Found Error',
-			`User with id ${userId} not found!`,
-			404,
-			'user',
-		);
-	}
-	// checking if the user is already deleted
-	const isDeleted = user?.isDeleted;
-
-	if (isDeleted) {
-		throw new ErrorWithStatus(
-			'User Deleted',
-			`User with id ${userId} is deleted!`,
-			403,
-			'user',
-		);
-	}
-
-	// checking if the user is blocked
-	const userStatus = user?.status;
-
-	if (userStatus === 'blocked') {
-		throw new ErrorWithStatus(
-			'Not Matched Error',
-			`User with id ${userId} is blocked!`,
-			403,
-			'user',
-		);
-	}
-
-	if (
-		user.passwordChangedAt &&
-		User.isJWTIssuedBeforePasswordChanged(
-			user.passwordChangedAt,
-			iat as number,
-		)
-	) {
-		throw new ErrorWithStatus(
-			'Unauthorized Access',
-			`You're not authorized!`,
-			403,
-			'user',
-		);
-	}
+	const decoded = verifyToken(token, configs.refreshSecret);
+	const user = await validateUser(decoded.userId, decoded.iat);
 
 	const jwtPayload = {
 		userId: user.id,
@@ -224,9 +114,7 @@ const refreshToken = async (token: string) => {
 		configs.accessExpireTime,
 	);
 
-	return {
-		accessToken,
-	};
+	return { accessToken };
 };
 
 export const authServices = {
