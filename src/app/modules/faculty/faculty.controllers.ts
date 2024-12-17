@@ -5,19 +5,19 @@ import { facultyServices } from './faculty.services';
 const createFaculty = catchAsync(async (req, res) => {
 	const result = await facultyServices.saveFacultyIntoDB(req.body);
 
-	sendResponse(res, 201, 'Faculty is created successfully', result);
+	sendResponse(res, 'Faculty', 'create', result);
 });
 
 const getAllFaculties = catchAsync(async (_req, res) => {
 	const result = await facultyServices.getAllFacultiesFromDB();
 
-	sendResponse(res, 200, 'Faculties are retrieved successfully', result);
+	sendResponse(res, 'Faculty', 'get', result);
 });
 
 const getSingleFaculty = catchAsync(async (req, res) => {
 	const result = await facultyServices.getSingleFacultyFromDB(req.params.id);
 
-	sendResponse(res, 200, 'Faculty is retrieved successfully', result);
+	sendResponse(res, 'Faculty', 'get', result);
 });
 
 const updateFaculty = catchAsync(async (req, res) => {
@@ -26,7 +26,7 @@ const updateFaculty = catchAsync(async (req, res) => {
 		req.body,
 	);
 
-	sendResponse(res, 200, 'Faculty is updated successfully', result);
+	sendResponse(res, 'Faculty', 'update', result);
 });
 
 export const facultyControllers = {

@@ -5,19 +5,19 @@ import { courseServices } from './course.services';
 const createCourse = catchAsync(async (req, res) => {
 	const result = await courseServices.saveCourseInDB(req.body);
 
-	sendResponse(res, 201, 'Course is created successfully!', result);
+	sendResponse(res, 'Course', 'create', result);
 });
 
 const getAllCourses = catchAsync(async (req, res) => {
 	const result = await courseServices.getAllCoursesFromDB(req.query);
 
-	sendResponse(res, 200, 'Courses are retrieved successfully', result);
+	sendResponse(res, 'Course', 'get', result);
 });
 
 const getSingleCourse = catchAsync(async (req, res) => {
 	const result = await courseServices.getSingleCourseFromDB(req.params.id);
 
-	sendResponse(res, 200, 'Course is retrieved successfully!', result);
+	sendResponse(res, 'Course', 'get', result);
 });
 
 const updateCourse = catchAsync(async (req, res) => {
@@ -26,13 +26,13 @@ const updateCourse = catchAsync(async (req, res) => {
 		req.body,
 	);
 
-	sendResponse(res, 200, 'Course is updated successfully!', result);
+	sendResponse(res, 'Course', 'update', result);
 });
 
 const deleteCourse = catchAsync(async (req, res) => {
 	const result = await courseServices.deleteCourseFromDB(req.params.id);
 
-	sendResponse(res, 200, 'Course is deleted successfully!', result);
+	sendResponse(res, 'Course', 'delete', result);
 });
 
 const assignTeachersWithCourse = catchAsync(async (req, res) => {
@@ -41,7 +41,13 @@ const assignTeachersWithCourse = catchAsync(async (req, res) => {
 		req.body,
 	);
 
-	sendResponse(res, 200, 'Faculties assigned successfully!', result);
+	sendResponse(
+		res,
+		'Course',
+		'update',
+		result,
+		'Teachers assigned successfully!',
+	);
 });
 
 const removeTeachersFromCourse = catchAsync(async (req, res) => {
@@ -50,7 +56,13 @@ const removeTeachersFromCourse = catchAsync(async (req, res) => {
 		req.body,
 	);
 
-	sendResponse(res, 200, 'Faculties removed  successfully!', result);
+	sendResponse(
+		res,
+		'Course',
+		'update',
+		result,
+		'Teachers removed successfully!',
+	);
 });
 
 export const courseControllers = {

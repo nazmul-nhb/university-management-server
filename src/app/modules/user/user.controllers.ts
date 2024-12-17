@@ -7,7 +7,7 @@ const createStudent = catchAsync(async (req, res) => {
 
 	const newStudent = await userServices.saveStudentInDB(password, student);
 
-	sendResponse(res, 201, 'Student is created successfully!', newStudent);
+	sendResponse(res, 'Student', 'create', newStudent);
 });
 
 const createAdmin = catchAsync(async (req, res) => {
@@ -15,7 +15,7 @@ const createAdmin = catchAsync(async (req, res) => {
 
 	const newAdmin = await userServices.saveAdminInDB(password, admin);
 
-	sendResponse(res, 201, 'Student is created successfully!', newAdmin);
+	sendResponse(res, 'Admin', 'create', newAdmin);
 });
 
 const createTeacher = catchAsync(async (req, res) => {
@@ -23,7 +23,7 @@ const createTeacher = catchAsync(async (req, res) => {
 
 	const newTeacher = await userServices.saveTeacherInDB(password, teacher);
 
-	sendResponse(res, 201, 'Student is created successfully!', newTeacher);
+	sendResponse(res, 'Teacher', 'create', newTeacher);
 });
 
 export const userControllers = { createStudent, createAdmin, createTeacher };

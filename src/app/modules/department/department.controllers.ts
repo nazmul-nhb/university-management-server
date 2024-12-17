@@ -5,13 +5,13 @@ import { departmentServices } from './department.services';
 const createDepartment = catchAsync(async (req, res) => {
 	const result = await departmentServices.saveDepartmentInDB(req.body);
 
-	sendResponse(res, 201, 'Department is created successfully', result);
+	sendResponse(res, 'Department', 'create', result);
 });
 
 const getAllDepartments = catchAsync(async (_req, res) => {
 	const result = await departmentServices.getAllDepartmentsFromDB();
 
-	sendResponse(res, 200, 'Departments are retrieved successfully', result);
+	sendResponse(res, 'Department', 'get', result);
 });
 
 const getSingleDepartment = catchAsync(async (req, res) => {
@@ -19,7 +19,7 @@ const getSingleDepartment = catchAsync(async (req, res) => {
 		req.params.id,
 	);
 
-	sendResponse(res, 200, 'Department is retrieved successfully', result);
+	sendResponse(res, 'Department', 'get', result);
 });
 
 const updateDepartment = catchAsync(async (req, res) => {
@@ -28,7 +28,7 @@ const updateDepartment = catchAsync(async (req, res) => {
 		req.body,
 	);
 
-	sendResponse(res, 200, 'Department is updated successfully', result);
+	sendResponse(res, 'Department', 'update', result);
 });
 
 export const departmentControllers = {

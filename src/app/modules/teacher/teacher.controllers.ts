@@ -5,13 +5,13 @@ import { teacherServices } from './teacher.services';
 const getSingleTeacher = catchAsync(async (req, res) => {
 	const result = await teacherServices.getSingleTeacherFromDB(req.params.id);
 
-	sendResponse(res, 200, 'Teacher is retrieved successfully!', result);
+	sendResponse(res, 'Teacher', 'get', result);
 });
 
 const getAllTeachers = catchAsync(async (req, res) => {
 	const result = await teacherServices.getAllTeachersFromDB(req.query);
 
-	sendResponse(res, 200, 'Teachers are retrieved successfully!', result);
+	sendResponse(res, 'Teacher', 'get', result);
 });
 
 const updateTeacher = catchAsync(async (req, res) => {
@@ -20,13 +20,13 @@ const updateTeacher = catchAsync(async (req, res) => {
 		req.body,
 	);
 
-	sendResponse(res, 200, 'Teacher is updated successfully!', result);
+	sendResponse(res, 'Teacher', 'update', result);
 });
 
 const deleteTeacher = catchAsync(async (req, res) => {
 	const result = await teacherServices.deleteTeacherFromDB(req.params.id);
 
-	sendResponse(res, 200, 'Teacher is deleted successfully!', result);
+	sendResponse(res, 'Teacher', 'delete', result);
 });
 
 export const teacherControllers = {

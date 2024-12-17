@@ -65,7 +65,7 @@ export const isParserError = (error: unknown): error is IParserError => {
 		typeof error === 'object' &&
 		error !== null &&
 		'type' in error &&
-		(error as IParserError).type === 'entity.parse.failed'
+		error.type === 'entity.parse.failed'
 	);
 };
 

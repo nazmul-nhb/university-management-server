@@ -6,13 +6,13 @@ import { ErrorWithStatus } from '../../classes/ErrorWithStatus';
 const createSemester = catchAsync(async (req, res) => {
 	const newSemester = await semesterServices.saveSemesterIntoDB(req.body);
 
-	sendResponse(res, 201, 'Semester is created successfully!', newSemester);
+	sendResponse(res, 'Semester', 'get', newSemester);
 });
 
 const getAllSemesters = catchAsync(async (_req, res) => {
 	const semesters = await semesterServices.getAllSemestersFromDB();
 
-	sendResponse(res, 200, 'Semesters are retrieved successfully', semesters);
+	sendResponse(res, 'Semester', 'get', semesters);
 });
 
 const getSingleSemester = catchAsync(async (req, res) => {
@@ -29,7 +29,7 @@ const getSingleSemester = catchAsync(async (req, res) => {
 		);
 	}
 
-	sendResponse(res, 200, 'Semester is retrieved successfully', semester);
+	sendResponse(res, 'Semester', 'get', semester);
 });
 
 const updateSemester = catchAsync(async (req, res) => {
@@ -47,7 +47,7 @@ const updateSemester = catchAsync(async (req, res) => {
 		);
 	}
 
-	sendResponse(res, 200, 'Semester is updated successfully', semester);
+	sendResponse(res, 'Semester', 'update', semester);
 });
 
 export const semesterControllers = {

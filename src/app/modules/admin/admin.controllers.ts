@@ -5,25 +5,25 @@ import { adminServices } from './admin.services';
 const getSingleAdmin = catchAsync(async (req, res) => {
 	const result = await adminServices.getSingleAdminFromDB(req.params.id);
 
-	sendResponse(res, 200, 'Admin is retrieved successfully!', result);
+	sendResponse(res, 'Admin', 'get', result);
 });
 
 const getAllAdmins = catchAsync(async (req, res) => {
 	const result = await adminServices.getAllAdminsFromDB(req.query);
 
-	sendResponse(res, 200, 'Admins are retrieved successfully!', result);
+	sendResponse(res, 'Admin', 'get', result);
 });
 
 const updateAdmin = catchAsync(async (req, res) => {
 	const result = await adminServices.updateAdminInDB(req.params.id, req.body);
 
-	sendResponse(res, 200, 'Admin is updated successfully!', result);
+	sendResponse(res, 'Admin', 'update', result);
 });
 
 const deleteAdmin = catchAsync(async (req, res) => {
 	const result = await adminServices.deleteAdminFromDB(req.params.id);
 
-	sendResponse(res, 200, 'Admin is deleted successfully!', result);
+	sendResponse(res, 'Admin', 'delete', result);
 });
 
 export const adminControllers = {
