@@ -9,8 +9,8 @@
 		"deploy": "node build.mjs && vercel --prod",
 		"start": "node dist/server.js",
 		"format": "prettier --write src/",
-		"lint": "eslint src",
-		"fix": "eslint src --fix"
+		"lint": "node lint.mjs",
+		"fix": "node fix.mjs"
 	},
 	"keywords": [
 		"typescript",
