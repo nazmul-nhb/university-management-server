@@ -47,9 +47,14 @@ export const connectDB = async (): Promise<void> => {
 };
 
 export default {
+	NODE_ENV: process.env.NODE_ENV,
 	port: process.env.PORT || 4242,
 	nodeEnvironment: process.env.NODE_ENV as string,
 	saltRounds: process.env.SALT_ROUNDS as string,
 	defaultPassword: process.env.DEFAULT_PASSWORD as string,
+	accessSecret: process.env.JWT_ACCESS_SECRET as string,
+	accessExpireTime: process.env.JWT_ACCESS_EXPIRES_IN as string,
+	refreshSecret: process.env.JWT_REFRESH_SECRET as string,
+	refreshExpireTime: process.env.JWT_REFRESH_EXPIRES_IN as string,
 	connectDB,
 };

@@ -22,3 +22,9 @@ export const userSearchableFields = [
 	'name.lastName',
 	'name.middleName',
 ];
+
+export const USER_ROLE = {
+	student: 'student',
+	faculty: 'faculty',
+	admin: 'admin',
+} as const;

@@ -11,6 +11,7 @@
 - `cors`
 - `dotenv`
 - `bcrypt`
+- `jsonwebtoken`
 - `chalk`
 - `progress-indicator`
 - `execa`
