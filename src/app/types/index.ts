@@ -8,6 +8,7 @@ export type TCollection =
 	| 'Department'
 	| 'Faculty'
 	| 'Registration'
+	| 'Offered course'
 	| 'Semester';
 
 export type TOperation = 'create' | 'get' | 'update' | 'delete';

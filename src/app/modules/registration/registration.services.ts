@@ -213,13 +213,13 @@ const updateRegistrationIntoDB = async (
 // 			);
 // 		}
 
-// 		const deletedSemisterRegistration =
+// 		const deletedRegistration =
 // 			await Registration.findByIdAndDelete(id, {
 // 				session,
 // 				new: true,
 // 			});
 
-// 		if (!deletedSemisterRegistration) {
+// 		if (!deletedRegistration) {
 // 			throw new AppError(
 // 				httpStatus.BAD_REQUEST,
 // 				'Failed to delete semester registration !',
