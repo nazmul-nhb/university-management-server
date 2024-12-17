@@ -10,7 +10,7 @@ router.get('/', offeredCourseControllers.getAllOfferedCourses);
 router.get('/:id', offeredCourseControllers.getSingleOfferedCourses);
 
 router.post(
-	'/create-offered-course',
+	'/create',
 	validateRequest(offeredCourseValidations.creationSchema),
 	offeredCourseControllers.createOfferedCourse,
 );

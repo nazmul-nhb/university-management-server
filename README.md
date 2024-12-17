@@ -100,38 +100,12 @@ All error responses follow this structured format:
 
 ```json
 {
-  "message": "Error message",
   "success": false,
-  "error": {
-    "name": "ErrorName",
-    "errors": { ... }
-  },
-  "stack": "Error: Something went wrong\n    at..."
+  "message": "Short error message",
+  "errorSources": [
+    "path": "Where error occurred",
+    "message": "Exact error message"
+  ],
+  "stack": "Error stack if available..." // Only in development mode
 }
-```
-
-- Example:
-
-```json
-{
- "message": "BSONError: Invalid ObjectId",
- "success": false,
- "error": {
-  "name": "MongoDBCastError",
-  "errors": {
-   "_id": {
-    "message": "Invalid ObjectId: 6742c11a49c1956daec11abdb",
-    "name": "CastError",
-    "properties": {
-     "message": "Invalid ObjectId: 6742c11a49c1956daec11abdb",
-     "type": "ObjectId"
-    },
-    "kind": "ObjectId",
-    "path": "_id",
-    "value": "6742c11a49c1956daec11abdb"
-   }
-  }
- },
- "stack": "Error: Something went wrong\n    at path \"_id\" for model \"Product\"\n\n    at SchemaObjectId.cast..."
- }
 ```

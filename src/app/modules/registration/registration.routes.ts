@@ -21,10 +21,7 @@ router.patch(
 
 router.get('/:id', registrationControllers.getSingleRegistration);
 
-// router.delete(
-//   '/:id',
-// registrationControllers.deleteRegistration,
-// );
+router.delete('/:id', registrationControllers.deleteRegistration);
 
 router.get('/', registrationControllers.getAllRegistrations);
 

@@ -33,18 +33,18 @@ const updateRegistration = catchAsync(async (req, res) => {
 	sendResponse(res, 'Registration', 'update', result);
 });
 
-// const deleteRegistration = catchAsync(async (req, res) => {
-// 	const result = await registrationServices.deleteRegistrationFromDB(
-// 		req.params.id,
-// 	);
+const deleteRegistration = catchAsync(async (req, res) => {
+	const result = await registrationServices.deleteRegistrationFromDB(
+		req.params.id,
+	);
 
-// 	sendResponse(res, 'Registration', 'delete', result);
-// });
+	sendResponse(res, 'Registration', 'delete', result);
+});
 
 export const registrationControllers = {
 	createRegistration,
 	getAllRegistrations,
 	getSingleRegistration,
 	updateRegistration,
-	// deleteRegistration,
+	deleteRegistration,
 };

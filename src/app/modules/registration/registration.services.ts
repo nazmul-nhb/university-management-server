@@ -1,10 +1,12 @@
 // import { startSession } from 'mongoose';
+import { startSession } from 'mongoose';
 import { ErrorWithStatus } from '../../classes/ErrorWithStatus';
 import { QueryBuilder } from '../../classes/QueryBuilder';
 import { Semester } from '../semester/semester.model';
 import { RegistrationStatus } from './registration.constants';
 import { Registration } from './registration.model';
 import type { TRegistration } from './registration.types';
+import { OfferedCourse } from '../offeredCourse/offeredCourse.model';
 
 const saveRegistrationInDB = async (payload: TRegistration) => {
 	/**
@@ -159,88 +161,86 @@ const updateRegistrationIntoDB = async (
 	return result;
 };
 
-// const deleteRegistrationFromDB = async (id: string) => {
-// 	/**
-//   * Step1: Delete associated offered courses.
-//   * Step2: Delete semester registration when the status is
-//   'UPCOMING'.
-//   **/
+const deleteRegistrationFromDB = async (id: string) => {
+	/**
+	 * Step1: Delete associated offered courses.
+	 * Step2: Delete semester registration when the status is 'UPCOMING'.
+	 **/
 
-// 	// checking if the semester registration is exist
-// 	const isRegistrationExists = await Registration.findById(id);
+	// checking if the semester registration is exist
+	const registrationExists = await Registration.findById(id);
 
-// 	if (!isRegistrationExists) {
-// 		throw new ErrorWithStatus(
-// 			'Not Found Error',
-// 			`Specified semester not found!`,
-// 			404,
-// 			'registration',
-// 		);
-// 	}
+	if (!registrationExists) {
+		throw new ErrorWithStatus(
+			'Not Found Error',
+			`Specified semester not found!`,
+			404,
+			'registration',
+		);
+	}
 
-// 	// checking if the status is still "UPCOMING"
-// 	const semesterRegistrationStatus = isRegistrationExists.status;
+	// checking if the status is still "UPCOMING"
+	const semesterRegistrationStatus = registrationExists.status;
 
-//     if (semesterRegistrationStatus !== 'UPCOMING') {
-//         throw new ErrorWithStatus(
-// 			'Forbidden Action',
-// 			`You can not update as the registered semester is ${semesterRegistrationStatus}`,
-// 			403,
-// 			'registration',
-// 		);
-// 	}
+	if (semesterRegistrationStatus !== 'UPCOMING') {
+		throw new ErrorWithStatus(
+			'Forbidden Action',
+			`You can not update as the registered semester is ${semesterRegistrationStatus}`,
+			403,
+			'registration',
+		);
+	}
 
-// 	const session = await startSession();
+	const session = await startSession();
 
-// 	//deleting associated offered courses
+	session.startTransaction();
 
-// 	try {
-// 		session.startTransaction();
+	//deleting associated offered courses
 
-// 		const deletedOfferedCourse = await OfferedCourse.deleteMany(
-// 			{
-// 				semesterRegistration: id,
-// 			},
-// 			{
-// 				session,
-// 			},
-// 		);
+	try {
+		const deletedOfferedCourse = await OfferedCourse.deleteMany(
+			{ semesterRegistration: id },
+			{ session },
+		);
 
-// 		if (!deletedOfferedCourse) {
-// 			throw new AppError(
-// 				httpStatus.BAD_REQUEST,
-// 				'Failed to delete semester registration !',
-// 			);
-// 		}
+		if (!deletedOfferedCourse) {
+			throw new ErrorWithStatus(
+				'Unsuccessful Action',
+				'Failed to delete offered course!',
+				400,
+				'offered-course',
+			);
+		}
 
-// 		const deletedRegistration =
-// 			await Registration.findByIdAndDelete(id, {
-// 				session,
-// 				new: true,
-// 			});
+		const deletedRegistration = await Registration.findByIdAndDelete(id, {
+			session,
+			new: true,
+		});
 
-// 		if (!deletedRegistration) {
-// 			throw new AppError(
-// 				httpStatus.BAD_REQUEST,
-// 				'Failed to delete semester registration !',
-// 			);
-// 		}
+		if (!deletedRegistration) {
+			throw new ErrorWithStatus(
+				'Unsuccessful Action',
+				'Failed to delete semester registration !',
+				400,
+				'registration',
+			);
+		}
 
-// 		await session.commitTransaction();
-// 		await session.endSession();
+		await session.commitTransaction();
+		await session.endSession();
 
-// 		return null;
-// 	} catch (err: any) {
-// 		await session.abortTransaction();
-// 		await session.endSession();
-// 		throw new Error(err);
-// 	}
-// };
+		return deletedRegistration;
+	} catch (error) {
+		await session.abortTransaction();
+		await session.endSession();
+		throw error;
+	}
+};
 
 export const registrationServices = {
 	saveRegistrationInDB,
 	getAllRegistrationsFromDB,
 	getSingleRegistrationsFromDB,
 	updateRegistrationIntoDB,
-	// deleteRegistrationFromDB,
+	deleteRegistrationFromDB,
 };
