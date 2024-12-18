@@ -1,7 +1,7 @@
-import type { TUserRole } from '../modules/user/user.types';
-import { ErrorWithStatus } from '../classes/ErrorWithStatus';
 import configs from '../configs';
 import catchAsync from '../utilities/catchAsync';
+import type { TUserRole } from '../modules/user/user.types';
+import { ErrorWithStatus } from '../classes/ErrorWithStatus';
 import { validateUser, verifyToken } from '../modules/auth/auth.utilities';
 
 const auth = (...requiredRoles: TUserRole[]) => {
