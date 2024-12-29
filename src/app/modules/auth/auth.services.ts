@@ -10,13 +10,13 @@ import { ErrorWithStatus } from '../../classes/ErrorWithStatus';
 import type { IJwtPayload } from '../../types/interfaces';
 import { createToken, validateUser, verifyToken } from './auth.utilities';
 import configs from '../../configs';
+import { sendEmail } from '../../utilities/sendEmail';
 
 const loginUser = async (payload: TUserLogin): Promise<TLoginResponse> => {
 	// checking if the user is exist
 	const user = await validateUser(payload.id);
 
 	//checking if the password is correct
-
 	const passwordMatched = await User.isPasswordMatched(
 		payload?.password,
 		user?.password,
@@ -117,8 +117,64 @@ const refreshToken = async (token: string): Promise<TokenResponse> => {
 	return { accessToken };
 };
 
+const forgetPassword = async (userId: string) => {
+	const user = await validateUser(userId);
+
+	const jwtPayload = {
+		userId: user.id,
+		role: user.role,
+	};
+
+	const resetToken = createToken(jwtPayload, configs.accessSecret, '10m');
+
+	const resetUILink = `${configs.resetPasswordLink}?id=${user.id}&token=${resetToken} `;
+
+	sendEmail(user.email, resetUILink);
+};
+
+const resetPassword = async (
+	payload: { id: string; newPassword: string },
+	token: string,
+) => {
+	// checking if the user is exist
+	const user = await validateUser(payload.id);
+
+	const decoded = verifyToken(configs.accessSecret, token);
+
+	//localhost:3000?id=A-0001&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJBLTAwMDEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MDI4NTA2MTcsImV4cCI6MTcwMjg1MTIxN30.-T90nRaz8-KouKki1DkCSMAbsHyb9yDi0djZU3D6QO4
+
+	if (user.id !== decoded.userId) {
+		throw new ErrorWithStatus(
+			'Forbidden Access',
+			'You are forbidden!',
+			403,
+			'auth',
+		);
+	}
+
+	//hash new password
+	const newHashedPassword = await bcrypt.hash(
+		payload.newPassword,
+		Number(configs.saltRounds),
+	);
+
+	await User.findOneAndUpdate(
+		{
+			id: decoded.userId,
+			role: decoded.role,
+		},
+		{
+			password: newHashedPassword,
+			needsPasswordChange: false,
+			passwordChangedAt: new Date(),
+		},
+	);
+};
+
 export const authServices = {
 	loginUser,
 	changePassword,
 	refreshToken,
+	forgetPassword,
+	resetPassword,
 };

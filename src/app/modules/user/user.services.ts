@@ -36,6 +36,7 @@ const saveStudentInDB = async (
 			password,
 			role: 'student',
 			id: studentId,
+			email: payload.email,
 		};
 
 		// * create a user
@@ -96,6 +97,7 @@ const saveAdminInDB = async (
 			password,
 			role: 'admin',
 			id: adminId,
+			email: payload.email,
 		};
 
 		// create a user (transaction-1)
@@ -166,6 +168,7 @@ const saveTeacherInDB = async (
 			password,
 			role: 'teacher',
 			id: teacherId,
+			email: payload.email,
 		};
 
 		// create a user (transaction-1)
