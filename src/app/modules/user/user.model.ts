@@ -50,10 +50,7 @@ const userSchema = new Schema<TUser>(
 // Pre Save Middleware/Hook (prehook)
 userSchema.pre('save', async function (next) {
 	// hash password and save into DB
-	this.password = await bcrypt.hash(
-		this.password,
-		Number(configs.saltRounds),
-	);
+	this.password = await bcrypt.hash(this.password, configs.saltRounds);
 	next();
 });
 

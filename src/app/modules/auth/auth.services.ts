@@ -1,4 +1,3 @@
-import bcrypt from 'bcrypt';
 import type {
 	TResetPayload,
 	TChangePassword,
@@ -6,11 +5,12 @@ import type {
 	TokenResponse,
 	TUserLogin,
 } from './auth.types';
+import bcrypt from 'bcrypt';
+import configs from '../../configs';
 import { User } from '../user/user.model';
 import { ErrorWithStatus } from '../../classes/ErrorWithStatus';
 import type { IJwtPayload } from '../../types/interfaces';
 import { createToken, validateUser, verifyToken } from './auth.utilities';
-import configs from '../../configs';
 import { sendEmail } from '../../utilities/sendEmail';
 
 const loginUser = async (payload: TUserLogin): Promise<TLoginResponse> => {
@@ -81,14 +81,11 @@ const changePassword = async (
 	// hash new password
 	const newHashedPassword = await bcrypt.hash(
 		payload.newPassword,
-		Number(configs.saltRounds),
+		configs.saltRounds,
 	);
 
 	await User.findOneAndUpdate(
-		{
-			id: userData.userId,
-			role: userData.role,
-		},
+		{ id: userData.userId, role: userData.role },
 		{
 			password: newHashedPassword,
 			needsPasswordChange: false,
@@ -151,7 +148,7 @@ const resetPassword = async (payload: TResetPayload, token: string) => {
 	// hash new password
 	const newHashedPassword = await bcrypt.hash(
 		payload.newPassword,
-		Number(configs.saltRounds),
+		configs.saltRounds,
 	);
 
 	await User.findOneAndUpdate(

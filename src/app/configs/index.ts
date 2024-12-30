@@ -51,7 +51,7 @@ export default {
 	port: process.env.PORT || 4242,
 	NODE_ENV: process.env.NODE_ENV as string,
 	nodeEnvironment: process.env.NODE_ENV as string,
-	saltRounds: process.env.SALT_ROUNDS as string,
+	saltRounds: Number(process.env.SALT_ROUNDS as string),
 	defaultPassword: process.env.DEFAULT_PASSWORD as string,
 	accessSecret: process.env.JWT_ACCESS_SECRET as string,
 	accessExpireTime: process.env.JWT_ACCESS_EXPIRES_IN as string,
